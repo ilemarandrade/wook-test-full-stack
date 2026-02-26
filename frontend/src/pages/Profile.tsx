@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useForm } from 'react-hook-form';
+import { joiResolver } from '@hookform/resolvers/joi';
+import { ProfileFormValues, profileSchema } from '../schemas/authSchemas';
+import { TextFieldControlled } from '../components/form/TextFieldControlled';
 /// <reference types="vite/client" />
 
 const API_URL =
@@ -7,37 +11,39 @@ const API_URL =
 
 const Profile: React.FC = () => {
   const { user, token, logout, login } = useAuth();
-  const [name, setName] = useState(user?.name ?? '');
-  const [lastname, setLastname] = useState(user?.lastname ?? '');
-  const [document, setDocument] = useState(user?.document ?? '');
-  const [phone, setPhone] = useState(user?.phone ?? '');
-  const [lang, setLang] = useState(user?.lang ?? 'en');
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const {
+    control,
+    register,
+    handleSubmit,
+    reset,
+    formState: {  isSubmitting },
+  } = useForm<ProfileFormValues>({
+    resolver: joiResolver(profileSchema),
+  
+  });
 
   useEffect(() => {
-    if (!user || !token) return;
-
-    setName(user.name);
-    setLastname(user.lastname);
-    setDocument(user.document);
-    setPhone(user.phone);
-    setLang(user.lang ?? 'en');
-  }, [user, token]);
+    if (!user) return;
+    reset({
+      name: user.name,
+      lastname: user.lastname,
+      document: user.document,
+      phone: user.phone,
+      lang: user.lang ?? 'en',
+    });
+  }, [user, reset]);
 
   if (!user) {
     return null;
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (values: ProfileFormValues) => {
     setError(null);
     setMessage(null);
 
     if (!token) return;
-
-    setLoading(true);
 
     try {
       const res = await fetch(`${API_URL}/api/v1/auth/update_user`, {
@@ -45,15 +51,15 @@ const Profile: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
-          lang,
+          lang: values.lang,
         },
         body: JSON.stringify({
           user: {
-            name,
-            lastname,
-            document,
-            phone,
-            lang,
+            name: values.name,
+            lastname: values.lastname,
+            document: values.document,
+            phone: values.phone,
+            lang: values.lang,
           },
         }),
       });
@@ -66,18 +72,16 @@ const Profile: React.FC = () => {
         setMessage(data.message || 'Profile updated');
         login(token, {
           ...user,
-          name,
-          lastname,
-          document,
-          phone,
-          lang,
+          name: values.name,
+          lastname: values.lastname,
+          document: values.document,
+          phone: values.phone,
+          lang: values.lang,
         });
       }
     } catch (err) {
       console.error(err);
       setError('Unexpected error');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -103,56 +107,30 @@ const Profile: React.FC = () => {
             {error}
           </div>
         )}
-        <form onSubmit={handleSubmit} className="space-y-3">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-sm mb-1" htmlFor="name">
-                Name
-              </label>
-              <input
-                id="name"
-                className="w-full rounded-md bg-slate-950 border border-slate-700 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm mb-1" htmlFor="lastname">
-                Lastname
-              </label>
-              <input
-                id="lastname"
-                className="w-full rounded-md bg-slate-950 border border-slate-700 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
-                value={lastname}
-                onChange={(e) => setLastname(e.target.value)}
-              />
-            </div>
+            <TextFieldControlled<ProfileFormValues>
+              name="name"
+              control={control}
+              label="Name"
+            />
+            <TextFieldControlled<ProfileFormValues>
+              name="lastname"
+              control={control}
+              label="Lastname"
+            />
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-sm mb-1" htmlFor="document">
-                Document
-              </label>
-              <input
-                id="document"
-                className="w-full rounded-md bg-slate-950 border border-slate-700 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
-                value={document}
-                onChange={(e) => setDocument(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm mb-1" htmlFor="phone">
-                Phone
-              </label>
-              <input
-                id="phone"
-                className="w-full rounded-md bg-slate-950 border border-slate-700 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-              />
-            </div>
+            <TextFieldControlled<ProfileFormValues>
+              name="document"
+              control={control}
+              label="Document"
+            />
+            <TextFieldControlled<ProfileFormValues>
+              name="phone"
+              control={control}
+              label="Phone"
+            />
           </div>
           <div>
             <label className="block text-sm mb-1" htmlFor="lang">
@@ -161,8 +139,7 @@ const Profile: React.FC = () => {
             <select
               id="lang"
               className="w-full rounded-md bg-slate-950 border border-slate-700 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
-              value={lang ?? 'en'}
-              onChange={(e) => setLang(e.target.value)}
+              {...register('lang')}
             >
               <option value="en">English</option>
               <option value="es">Español</option>
@@ -170,10 +147,10 @@ const Profile: React.FC = () => {
           </div>
           <button
             type="submit"
-            disabled={loading}
+            disabled={isSubmitting}
             className="w-full mt-2 inline-flex justify-center rounded-md bg-sky-600 px-4 py-2 text-sm font-medium text-white hover:bg-sky-500 disabled:bg-slate-600"
           >
-            {loading ? 'Saving...' : 'Save changes'}
+            {isSubmitting ? 'Saving...' : 'Save changes'}
           </button>
         </form>
       </div>
