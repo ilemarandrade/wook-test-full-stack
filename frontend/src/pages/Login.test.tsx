@@ -1,22 +1,32 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter } from 'react-router-dom';
 import Login from './Login';
 import { AuthProvider } from '../context/AuthContext';
+import { apiClient } from '../config/axiosInstance';
+
+vi.mock('../config/axiosInstance', () => ({
+  apiClient: { post: vi.fn() },
+}));
+
+const queryClient = new QueryClient({ defaultOptions: { mutations: { retry: false } } });
 
 const renderLogin = () =>
   render(
-    <MemoryRouter>
-      <AuthProvider>
-        <Login />
-      </AuthProvider>
-    </MemoryRouter>
+    <QueryClientProvider client={queryClient}>
+      <MemoryRouter>
+        <AuthProvider>
+          <Login />
+        </AuthProvider>
+      </MemoryRouter>
+    </QueryClientProvider>
   );
 
 describe('Login page', () => {
   beforeEach(() => {
-    vi.stubGlobal('fetch', vi.fn());
+    vi.mocked(apiClient.post).mockReset();
   });
 
   it('renders login form with email and password fields', () => {
@@ -32,23 +42,7 @@ describe('Login page', () => {
   });
 
   it('calls login API on submit', async () => {
-    const mockFetch = vi.mocked(fetch);
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        jwt: 'token',
-        user: {
-          id: '1',
-          name: 'John',
-          lastname: 'Doe',
-          email: 'user@test.com',
-          document: '123',
-          phone: '',
-          lang: 'en',
-          role: 'USER',
-        },
-      }),
-    } as Response);
+    vi.mocked(apiClient.post).mockResolvedValueOnce({ jwt: 'token' } as any);
 
     const user = userEvent.setup();
     renderLogin();
@@ -57,14 +51,9 @@ describe('Login page', () => {
     await user.type(screen.getByLabelText(/password/i), 'secret123');
     await user.click(screen.getByRole('button', { name: /sign in/i }));
 
-    expect(mockFetch).toHaveBeenCalledWith(
-      expect.stringContaining('/api/v1/auth/login'),
-      expect.objectContaining({
-        method: 'POST',
-        body: JSON.stringify({
-          user: { email: 'user@test.com', password: 'secret123' },
-        }),
-      })
+    expect(apiClient.post).toHaveBeenCalledWith(
+      expect.stringContaining('/login'),
+      { user: { email: 'user@test.com', password: 'secret123' } }
     );
   });
 });

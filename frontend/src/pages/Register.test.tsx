@@ -1,19 +1,23 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter } from 'react-router-dom';
 import Register from './Register';
 
+const queryClient = new QueryClient({ defaultOptions: { mutations: { retry: false } } });
+
 const renderRegister = () =>
   render(
-    <MemoryRouter>
-      <Register />
-    </MemoryRouter>
+    <QueryClientProvider client={queryClient}>
+      <MemoryRouter>
+        <Register />
+      </MemoryRouter>
+    </QueryClientProvider>
   );
 
 describe('Register page', () => {
   beforeEach(() => {
-    vi.stubGlobal('fetch', vi.fn());
+    vi.clearAllMocks();
   });
 
   it('renders register form with required fields', () => {

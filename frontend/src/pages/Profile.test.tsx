@@ -1,11 +1,20 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter } from 'react-router-dom';
 import Profile from './Profile';
 import { AuthProvider } from '../context/AuthContext';
+import { apiClient } from '../config/axiosInstance';
+
+vi.mock('../config/axiosInstance', () => ({
+  apiClient: { put: vi.fn() },
+}));
+
+const queryClient = new QueryClient({ defaultOptions: { mutations: { retry: false } } });
 
 describe('Profile page', () => {
   beforeEach(() => {
+    (apiClient.put as unknown as ReturnType<typeof vi.fn>).mockReset?.();
     localStorage.setItem(
       'woow_auth',
       JSON.stringify({
@@ -26,11 +35,13 @@ describe('Profile page', () => {
 
   it('renders profile form with user data', () => {
     render(
-      <MemoryRouter>
-        <AuthProvider>
-          <Profile />
-        </AuthProvider>
-      </MemoryRouter>
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <AuthProvider>
+            <Profile />
+          </AuthProvider>
+        </MemoryRouter>
+      </QueryClientProvider>
     );
     expect(screen.getByDisplayValue('John')).toBeInTheDocument();
     expect(screen.getByDisplayValue('Doe')).toBeInTheDocument();
