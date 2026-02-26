@@ -1,0 +1,21 @@
+FROM node:20-alpine
+
+WORKDIR /usr/src/app
+
+# Dependencias del sistema mínimas para Prisma y Postgres
+RUN apk add --no-cache openssl bash curl netcat-openbsd
+
+# Copiar package.json y package-lock.json primero para aprovechar la cache de Docker
+COPY package*.json ./
+
+RUN npm install
+
+# Copiar el resto del código del backend (incluye src, prisma, configs, etc.)
+COPY . .
+
+# Puerto expuesto por el backend (configurado también vía PORT en docker-compose)
+EXPOSE 4000
+
+# El comando real se define en docker-compose.yml (service backend -> command)
+CMD ["npm", "run", "dev"]
+

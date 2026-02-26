@@ -1,0 +1,325 @@
+PLAN MONOREPO NODE + PRISMA + REACT
+
+1. ESTRUCTURA DEL MONOREPO
+--------------------------------
+- backend/: API (Express + Prisma + Jest).
+- frontend/: cliente React 18 (Vite + TS + Tailwind + Vitest).
+- Sin package.json en la raíz; sólo dentro de backend/ y frontend/.
+- Backend:
+  - backend/src/index.ts (entrypoint Express).
+  - backend/src/controllers/
+  - backend/src/v1/routes/
+  - backend/src/models/ (solo mientras migramos; luego se limpia).
+  - backend/src/services/
+  - backend/src/midlewares/
+- Frontend:
+  - frontend/src/main.tsx
+  - frontend/src/App.tsx
+  - frontend/src/pages/ (Login, Register, Profile).
+  - frontend/src/components/ (incluye ProtectedRoute).
+  - frontend/src/context/ (AuthContext).
+
+
+2. BACKEND: PRISMA + POSTGRESQL (SOLO USER)
+-------------------------------------------
+2.1 Dependencias y configuración base
+- Dependencias principales:
+  - prisma, @prisma/client, pg.
+  - express, cors, etc.
+  - express-validator para validación.
+  - typescript, ts-node-dev, ts-node.
+  - jsonwebtoken, bcrypt (u otra librería de hashes).
+- Prisma:
+  - Crear backend/prisma/schema.prisma con:
+    - datasource db (postgresql, usa DATABASE_URL).
+    - generator client (Prisma Client).
+- .env backend:
+  - DATABASE_URL=postgresql://POSTGRES_USER:POSTGRES_PASSWORD@db:5432/POSTGRES_DB?schema=public
+  - JWT_SECRET
+  - PORT (por ej. 4000)
+  - NODE_ENV=development
+
+2.2 Modelo User en Prisma (único modelo en esta iteración)
+- Enum Role:
+  - USER, ADMIN.
+- Modelo User:
+  - id String @id @default(uuid())
+  - name String
+  - email String @unique
+  - password String
+  - role Role @default(USER)
+  - createdAt DateTime @default(now())
+  - updatedAt DateTime @updatedAt
+- Importante:
+  - NO crear otros modelos (Request, Account, etc.) en Prisma en esta fase.
+
+2.3 Inicialización y conexión
+- Comandos:
+  - npx prisma generate
+  - npx prisma migrate dev --name init (ejecutado desde Docker).
+- Cliente Prisma:
+  - backend/src/prisma/client.ts con una instancia única de PrismaClient.
+- Eliminar Mongoose:
+  - Quitar mongoose.connect(...) y uso de MongoDB en backend/src/index.ts.
+  - Más adelante eliminar mongoose de package.json y modelos viejos cuando ya no se usen.
+
+
+3. BACKEND: REPOSITORY, SERVICIOS, DTOS, VALIDACIÓN
+----------------------------------------------------
+3.1 Repositorio de User
+- Carpeta backend/src/repositories/.
+- Interfaz IUserRepository:
+  - findById(id: string)
+  - findByEmail(email: string)
+  - create(data: CreateUserData)
+  - update(id: string, data: UpdateUserData)
+- Implementación:
+  - PrismaUserRepository usando prisma.user.*.
+
+3.2 Servicios usando repositorios
+- Servicios en backend/src/services/:
+  - Auth service:
+    - Registro: hashear password, verificar email único, guardar vía repositorio.
+    - Login: comprobar credenciales, generar JWT.
+  - User service:
+    - getMe: devolver perfil basado en userId del token.
+    - updateMe: actualizar campos editables (no password salvo endpoint específico).
+
+3.3 DTOs para ocultar password
+- Carpeta backend/src/dtos/.
+- UserDTO con:
+  - id, name, email, role, createdAt, updatedAt.
+- Función toUserDTO(user: User) para mapear entidad a DTO.
+- Controladores:
+  - authControllers y controladores de usuario devuelven siempre UserDTO y nunca incluyen password.
+
+3.4 Validación con express-validator
+- Middlewares:
+  - backend/src/midlewares/validators/authValidators.ts:
+    - Validar registro (name, email, password, confirmación si aplica).
+    - Validar login (email, password).
+- Manejo de errores:
+  - validateRequest.ts:
+    - Usa validationResult y responde 400 con detalle de errores.
+- Rutas:
+  - Integrar validadores en backend/src/v1/routes/auth.ts y rutas de usuario.
+
+
+4. BACKEND: TESTING (JEST + SUPERTEST)
+--------------------------------------
+4.1 Configuración Jest
+- Dependencias:
+  - jest, ts-jest, @types/jest
+  - supertest, @types/supertest
+- Config:
+  - backend/jest.config.ts (para TS).
+  - Scripts en backend/package.json:
+    - "test": "jest --runInBand"
+    - "test:watch": "jest --watch"
+
+4.2 Qué se testea
+- Repositorios:
+  - PrismaUserRepository con Prisma mockeado:
+    - findByEmail, create, update.
+- Servicios:
+  - Auth service:
+    - Registro hashea password y maneja duplicado de email.
+    - Login genera JWT válido para credenciales correctas.
+  - User service:
+    - getMe devuelve el usuario correcto.
+    - updateMe aplica solo cambios permitidos.
+- Controladores / rutas (con supertest):
+  - /auth/register:
+    - 201, devuelve UserDTO sin password.
+  - /auth/login:
+    - 200, devuelve { token, user: UserDTO }.
+  - /users/me (GET/PUT):
+    - Requiere token, devuelve/actualiza información correcta.
+- Validaciones:
+  - Middlewares de express-validator:
+    - Inputs inválidos → 400 + array de errores.
+- Seguridad DTO:
+  - Tests que aseguren que ninguna respuesta de usuario contiene password.
+
+
+5. FRONTEND: REACT 18 + TS + VITE + TAILWIND
+--------------------------------------------
+5.1 Inicializar proyecto
+- Crear app Vite React-TS en frontend/.
+- Scripts: dev, build, preview.
+- Estructura:
+  - src/main.tsx
+  - src/App.tsx
+  - src/pages/ (Login.tsx, Register.tsx, Profile.tsx).
+  - src/components/ (ProtectedRoute.tsx).
+  - src/context/ (AuthContext.tsx).
+
+5.2 Tailwind CSS
+- Dependencias:
+  - tailwindcss, postcss, autoprefixer.
+- Config:
+  - tailwind.config.cjs, postcss.config.cjs.
+  - content: ./index.html y ./src/**/*.{ts,tsx}.
+- CSS:
+  - src/index.css con @tailwind base, components, utilities.
+- Usar utilidades Tailwind para formularios y vistas modernas.
+
+5.3 Routing + ProtectedRoute
+- React Router:
+  - Rutas: /login, /register, /profile (protegida).
+- ProtectedRoute:
+  - Usa AuthContext:
+    - Sin usuario/token → redirige a /login.
+    - Con usuario → renderiza componente hijo.
+
+5.4 AuthContext + JWT
+- AuthContext:
+  - Estado: user (DTO ligero), token (JWT).
+  - Métodos: login, logout, register.
+  - Inicialización: leer token y usuario desde localStorage al montar.
+- Cliente HTTP:
+  - Helper (fetch/axios) que añade Authorization: Bearer <token> si existe.
+- Páginas:
+  - Login:
+    - Formulario, validación básica, llama a /auth/login.
+    - En éxito: guarda token + user en AuthContext + localStorage, redirige a /profile.
+  - Register:
+    - Formulario con name, email, password, confirmación.
+    - En éxito: registrar y opcionalmente loguear de inmediato.
+  - Profile:
+    - Usa /users/me para cargar datos.
+    - Permite actualizar campos básicos y sincronizar con AuthContext.
+
+
+6. FRONTEND: TESTING (VITEST + REACT TESTING LIBRARY)
+-----------------------------------------------------
+6.1 Configuración Vitest
+- Dependencias:
+  - vitest
+  - @testing-library/react
+  - @testing-library/jest-dom
+  - @testing-library/user-event
+- Config:
+  - Ajustar vite.config.ts para Vitest.
+  - src/setupTests.ts para registrar jest-dom.
+- Scripts:
+  - "test": "vitest"
+  - "test:watch": "vitest --watch"
+
+6.2 Qué se testea
+- AuthContext:
+  - Restaura estado desde localStorage.
+  - login: mock de API, guarda token y usuario y actualiza estado.
+  - logout: borra token/usuario de contexto y localStorage.
+- ProtectedRoute:
+  - Sin usuario: redirige a /login.
+  - Con usuario: renderiza el componente hijo.
+- Páginas:
+  - Login: render de formulario, validaciones básicas, integración con AuthContext.login.
+  - Register: validaciones y envío correcto a API mock.
+  - Profile: carga datos desde API mock, permite editar y guardar, actualiza contexto.
+
+
+7. DOCKER COMPOSE + DOCKERFILE.DEV (REGLA DE ORO)
+-------------------------------------------------
+7.1 Objetivo
+- Antes de refactors profundos o UI:
+  - Crear docker-compose.yml.
+  - Crear backend/Dockerfile.dev y frontend/Dockerfile.dev.
+  - Validar red (frontend → backend → db), volumen de DB y .env.
+
+7.2 Servicio db (Postgres 15)
+- docker-compose.yml:
+  - Servicio db con imagen postgres:15.
+  - Variables: POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD.
+  - Volumen: db-data:/var/lib/postgresql/data.
+  - healthcheck con pg_isready.
+
+7.3 Servicio backend
+- backend/Dockerfile.dev:
+  - FROM node:20-alpine
+  - WORKDIR /usr/src/app
+  - Copiar package*.json + npm install
+  - Copiar código (incluye prisma/)
+- docker-compose.yml:
+  - Servicio backend:
+    - build: ./backend (Dockerfile.dev).
+    - depends_on: db (con healthcheck).
+    - environment:
+      - DATABASE_URL con host db.
+      - JWT_SECRET, PORT, NODE_ENV.
+    - volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules (volumen anónimo).
+    - command:
+      - Script para esperar a DB.
+      - npx prisma migrate dev.
+      - npx ts-node-dev src/index.ts.
+    - ports:
+      - 4000:4000.
+
+7.4 Servicio frontend
+- frontend/Dockerfile.dev:
+  - FROM node:20-alpine
+  - WORKDIR /usr/src/app
+  - Copiar package*.json + npm install
+  - Copiar código
+  - Comando: npm run dev -- --host 0.0.0.0 --port 5173
+- docker-compose.yml:
+  - Servicio frontend:
+    - build: ./frontend (Dockerfile.dev).
+    - ports: 5173:5173.
+    - environment:
+      - VITE_API_URL=http://backend:4000
+    - volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules (volumen anónimo).
+    - depends_on: backend.
+
+7.5 Variables de entorno
+- Archivos de ejemplo:
+  - backend/.env.example: DATABASE_URL, JWT_SECRET, PORT, NODE_ENV.
+  - frontend/.env.example: VITE_API_URL.
+- Manejo:
+  - .env reales ignorados por git.
+  - env_file para backend o variables en línea para DB en docker-compose.
+
+
+8. LIMPIEZA Y PRUEBAS END-TO-END
+--------------------------------
+- Limpieza:
+  - Eliminar dependencias y código de Mongoose/Mongo.
+  - Eliminar Dockerfiles/compose antiguos que no se usen.
+- Pruebas E2E manuales:
+  - docker-compose up.
+  - Verificar:
+    - db healthy.
+    - backend migra con Prisma y arranca.
+    - frontend en http://localhost:5173.
+  - Flujos:
+    - Registro → Login → /profile.
+    - Token en localStorage.
+    - Cambios de perfil reflejados en PostgreSQL.
+- Pruebas E2E automáticas básicas:
+  - cd backend && npm test.
+  - cd frontend && npm test.
+
+
+9. ESTRATEGIA DE COMMITS (CONVENTIONAL COMMITS)
+-----------------------------------------------
+- Inicialización Git:
+  - Inicializar repo.
+  - Configurar .gitignore (node_modules, dist, .env, etc.).
+- Commits por feature (ejemplos):
+  - feat(docker): add docker-compose and dev dockerfiles
+  - feat(backend): add prisma user model and client
+  - refactor(backend): replace mongoose user with prisma repository
+  - feat(backend): add user dtos and auth services
+  - feat(backend): add express-validator for auth routes
+  - test(backend): add unit tests for user repository and services
+  - test(backend): add integration tests for auth routes
+  - feat(frontend): scaffold react app with auth pages and protected route
+  - feat(frontend): add auth context with jwt persistence
+  - test(frontend): add vitest tests for auth context and pages
+  - chore(cleanup): remove mongoose and legacy mongo models
+
