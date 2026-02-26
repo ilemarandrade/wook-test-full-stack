@@ -26,3 +26,7 @@ Thumbs.db
 # Logs and debug
 *.log
 npm-debug.log*
+
+# Local plans and proposals (do not commit)
+propuestas.txt
+PLAN_MONOREPO.txt
