@@ -16,6 +16,7 @@ export interface ApiErrorData {
 }
 
 export interface TypedAxiosInstance extends AxiosInstance {
+  get<T = unknown, R = T>(url: string, config?: AxiosRequestConfig): Promise<R>;
   post<T = unknown, R = T>(
     url: string,
     data?: unknown,

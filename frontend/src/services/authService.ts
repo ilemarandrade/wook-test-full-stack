@@ -2,9 +2,14 @@ import { apiClient } from '../config/axiosInstance';
 import type { LoginFormValues } from '../schemas/authSchemas';
 import type { RegisterFormValues } from '../schemas/authSchemas';
 import type { ProfileFormValues } from '../schemas/authSchemas';
+import type { User } from '../context/AuthContext';
 
 export interface LoginResponse {
   jwt: string;
+}
+
+export interface UserInformationResponse {
+  user: User;
 }
 
 export interface RegisterResponse {
@@ -55,7 +60,12 @@ export const authService = {
         },
       }
     ));
-    
+
     return data;
+  },
+
+  getCurrentUser: async (): Promise<User> => {
+    const data = await apiClient.get<UserInformationResponse>('/user_information');
+    return data.user;
   },
 };
