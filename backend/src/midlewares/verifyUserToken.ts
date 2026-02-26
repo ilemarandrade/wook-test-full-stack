@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { getJwtSecret } from '../utils/jwtHelper';
 import handleTraductions from '../utils/handleTraductions';
 import { IRequest } from '../models/Request';
 import { NextFunction, Response } from 'express';
@@ -19,10 +20,7 @@ const verifyUserToken = async (
         throw new Error('Authentication failed!');
       }
 
-      const verified = jwt.verify(
-        token,
-        (process.env.JWT_SECRET || process.env.SECRET_JWT) as string
-      );
+      const verified = jwt.verify(token, getJwtSecret());
 
       if (verified) {
         req.user = verified;

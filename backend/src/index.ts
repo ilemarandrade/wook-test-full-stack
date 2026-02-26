@@ -1,10 +1,12 @@
 import express from 'express';
 import cors from 'cors';
-import v1RouterAuth from './v1/routes/auth';
-// import { transporter } from './utils/sendEmail';
 import dotenv from 'dotenv';
+import { validateEnv } from './config/envSchema';
+import v1RouterAuth from './v1/routes/auth';
 
 dotenv.config();
+validateEnv();
+
 const app = express();
 const PORT = process.env.PORT || 8081;
 

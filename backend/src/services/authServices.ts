@@ -5,6 +5,7 @@ import recoveryPasswordMail from '../constants/mails/recoveryPassword';
 import { encrypt, compare } from '../utils/encryptPassword';
 import { IResponseServices, Lang } from '../models/Request';
 import { userRepository } from '../repositories/userRepository';
+import { getJwtSecret } from '../utils/jwtHelper';
 
 interface ILogin {
   user: {
@@ -19,9 +20,6 @@ interface IResponseLogin {
   message?: string;
 }
 
-const getJwtSecret = () => {
-  return process.env.JWT_SECRET || process.env.SECRET_JWT || 'default-test-secret';
-};
 
 const login = async ({
   user,

@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import handleTraductions from '../utils/handleTraductions';
 import { Response } from 'express';
 import { IRequest } from '../models/Request';
+import { getJwtSecret } from '../utils/jwtHelper';
 
 const login = async (req: IRequest, res: Response) => {
   const { lang = 'en' } = req.headers;
@@ -19,7 +20,7 @@ const user_information = async (req: IRequest, res: Response) => {
   try {
     const token = req.token;
     if (token) {
-      const verified = jwt.verify(token, process.env.SECRET_JWT as string);
+      const verified = jwt.verify(token, getJwtSecret());
       return res.status(200).send(verified);
     }
 
