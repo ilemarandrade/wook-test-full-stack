@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { joiResolver } from '@hookform/resolvers/joi';
+import { RegisterFormValues, registerSchema } from '../schemas/authSchemas';
+import { TextFieldControlled } from '../components/form/TextFieldControlled';
+import { PasswordFieldControlled } from '../components/form/PasswordFieldControlled';
 /// <reference types="vite/client" />
 
 const API_URL =
@@ -7,26 +12,18 @@ const API_URL =
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
-  const [name, setName] = useState('');
-  const [lastname, setLastname] = useState('');
-  const [email, setEmail] = useState('');
-  const [document, setDocument] = useState('');
-  const [phone, setPhone] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const {
+    control,
+    handleSubmit,
+    formState: {  isSubmitting },
+  } = useForm<RegisterFormValues>({
+    resolver: joiResolver(registerSchema),
+    
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (values: RegisterFormValues) => {
     setError(null);
-
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
-      return;
-    }
-
-    setLoading(true);
 
     try {
       const res = await fetch(`${API_URL}/api/v1/auth/signup`, {
@@ -36,12 +33,12 @@ const Register: React.FC = () => {
         },
         body: JSON.stringify({
           user: {
-            name,
-            lastname,
-            email,
-            document,
-            phone,
-            password,
+            name: values.name,
+            lastname: values.lastname,
+            email: values.email,
+            document: values.document,
+            phone: values.phone,
+            password: values.password,
           },
         }),
       });
@@ -56,8 +53,6 @@ const Register: React.FC = () => {
     } catch (err) {
       console.error(err);
       setError('Unexpected error');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -70,102 +65,53 @@ const Register: React.FC = () => {
             {error}
           </div>
         )}
-        <form onSubmit={handleSubmit} className="space-y-3">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-sm mb-1" htmlFor="name">
-                Name
-              </label>
-              <input
-                id="name"
-                className="w-full rounded-md bg-slate-950 border border-slate-700 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm mb-1" htmlFor="lastname">
-                Lastname
-              </label>
-              <input
-                id="lastname"
-                className="w-full rounded-md bg-slate-950 border border-slate-700 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
-                value={lastname}
-                onChange={(e) => setLastname(e.target.value)}
-              />
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm mb-1" htmlFor="email">
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              className="w-full rounded-md bg-slate-950 border border-slate-700 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
+            <TextFieldControlled<RegisterFormValues>
+              name="name"
+              control={control}
+              label="Name"
+            />
+            <TextFieldControlled<RegisterFormValues>
+              name="lastname"
+              control={control}
+              label="Lastname"
             />
           </div>
-          <div>
-            <label className="block text-sm mb-1" htmlFor="document">
-              Document
-            </label>
-            <input
-              id="document"
-              className="w-full rounded-md bg-slate-950 border border-slate-700 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
-              value={document}
-              onChange={(e) => setDocument(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm mb-1" htmlFor="phone">
-              Phone
-            </label>
-            <input
-              id="phone"
-              className="w-full rounded-md bg-slate-950 border border-slate-700 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-            />
-          </div>
+          <TextFieldControlled<RegisterFormValues>
+            name="email"
+            control={control}
+            label="Email"
+            type="email"
+          />
+          <TextFieldControlled<RegisterFormValues>
+            name="document"
+            control={control}
+            label="Document"
+          />
+          <TextFieldControlled<RegisterFormValues>
+            name="phone"
+            control={control}
+            label="Phone"
+          />
           <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-sm mb-1" htmlFor="password">
-                Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                className="w-full rounded-md bg-slate-950 border border-slate-700 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm mb-1" htmlFor="confirmPassword">
-                Confirm password
-              </label>
-              <input
-                id="confirmPassword"
-                type="password"
-                className="w-full rounded-md bg-slate-950 border border-slate-700 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-              />
-            </div>
+            <PasswordFieldControlled<RegisterFormValues>
+              name="password"
+              control={control}
+              label="Password"
+            />
+            <PasswordFieldControlled<RegisterFormValues>
+              name="confirmPassword"
+              control={control}
+              label="Confirm password"
+            />
           </div>
           <button
             type="submit"
-            disabled={loading}
+            disabled={isSubmitting}
             className="w-full mt-2 inline-flex justify-center rounded-md bg-sky-600 px-4 py-2 text-sm font-medium text-white hover:bg-sky-500 disabled:bg-slate-600"
           >
-            {loading ? 'Registering...' : 'Register'}
+            {isSubmitting ? 'Registering...' : 'Register'}
           </button>
         </form>
         <p className="mt-4 text-sm text-center text-slate-400">
