@@ -5,7 +5,6 @@ import recoveryPasswordMail from '../constants/mails/recoveryPassword.js';
 import { encrypt, compare } from '../utils/encryptPassword.js';
 import { IResponseServices, Lang } from '../models/Request.js';
 import { userRepository } from '../repositories/userRepository.js';
-import { toUserDTO, UserDTO } from '../dtos/UserDTO.js';
 
 interface ILogin {
   user: {
@@ -17,7 +16,6 @@ interface ILogin {
 
 interface IResponseLogin {
   jwt?: string;
-  user?: UserDTO;
   message?: string;
 }
 
@@ -65,14 +63,14 @@ const login = async ({
       {
         user: userPayload,
       },
-      getJwtSecret()
+      getJwtSecret(),
+      { expiresIn: '5m' }
     );
 
     return {
       statusCode: 200,
       response: {
         jwt: token,
-        user: toUserDTO(foundUser),
       },
     };
   } catch (error) {

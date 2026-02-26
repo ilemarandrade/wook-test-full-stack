@@ -71,7 +71,7 @@ describe('authServices.login', () => {
     expect(result.response.message).toBe('message.login.wrong_data');
   });
 
-  it('should return jwt and user dto on successful login without password', async () => {
+  it('should return jwt on successful login', async () => {
     userRepository.findByEmail.mockResolvedValue({
       id: 'user-id',
       name: 'John',
@@ -96,11 +96,6 @@ describe('authServices.login', () => {
 
     expect(result.statusCode).toBe(200);
     expect(result.response.jwt).toBeDefined();
-    expect(result.response.user).toBeDefined();
-    expect(result.response.user?.email).toBe('john@example.com');
-    expect(
-      (result.response.user as unknown as { password?: string }).password
-    ).toBeUndefined();
   });
 });
 
