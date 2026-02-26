@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useForm } from 'react-hook-form';
+import { joiResolver } from '@hookform/resolvers/joi';
+import { LoginFormValues, loginSchema } from '../schemas/authSchemas';
+import { TextFieldControlled } from '../components/form/TextFieldControlled';
+import { PasswordFieldControlled } from '../components/form/PasswordFieldControlled';
 /// <reference types="vite/client" />
 
 const API_URL =
@@ -10,15 +15,18 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const {
+    control,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm<LoginFormValues>({
+    resolver: joiResolver(loginSchema),
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  });
+
+  const onSubmit = async (values: LoginFormValues) => {
     setError(null);
-    setLoading(true);
 
     try {
       const res = await fetch(`${API_URL}/api/v1/auth/login`, {
@@ -27,7 +35,7 @@ const Login: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          user: { email, password },
+          user: { email: values.email, password: values.password },
         }),
       });
 
@@ -36,14 +44,12 @@ const Login: React.FC = () => {
       if (!res.ok) {
         setError(data.message || 'Login failed');
       } else {
-        login(data.jwt, data.user);
+        login(data.jwt);
         navigate('/profile');
       }
     } catch (err) {
       console.error(err);
       setError('Unexpected error');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -56,39 +62,24 @@ const Login: React.FC = () => {
             {error}
           </div>
         )}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm mb-1" htmlFor="email">
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              className="w-full rounded-md bg-slate-950 border border-slate-700 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm mb-1" htmlFor="password">
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              className="w-full rounded-md bg-slate-950 border border-slate-700 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <TextFieldControlled<LoginFormValues>
+            name="email"
+            control={control}
+            label="Email"
+            type="email"
+          />
+          <PasswordFieldControlled<LoginFormValues>
+            name="password"
+            control={control}
+            label="Password"
+          />
           <button
             type="submit"
-            disabled={loading}
+            disabled={isSubmitting}
             className="w-full mt-2 inline-flex justify-center rounded-md bg-sky-600 px-4 py-2 text-sm font-medium text-white hover:bg-sky-500 disabled:bg-slate-600"
           >
-            {loading ? 'Signing in...' : 'Sign in'}
+            {isSubmitting ? 'Signing in...' : 'Sign in'}
           </button>
         </form>
         <p className="mt-4 text-sm text-center text-slate-400">
