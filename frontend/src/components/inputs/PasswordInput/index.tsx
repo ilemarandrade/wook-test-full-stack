@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import TextInput, { TextInputProps } from '../TextInput';
+import EyeClosedIcon from '../../../icons/EyeClosedIcon';
+import EyeIcon from '../../../icons/EyeIcon';
 
 export interface PasswordInputProps
   extends Omit<TextInputProps, 'type' | 'error'> {
@@ -23,10 +25,10 @@ const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
           <button
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
-            className="absolute inset-y-0 right-3 flex items-center text-xs text-slate-400 hover:text-slate-200"
+            className="absolute right-3 bottom-0 flex items-center text-xs text-slate-400 hover:text-slate-200 h-[37px]"
             tabIndex={-1}
           >
-            {showPassword ? 'Hide' : 'Show'}
+            {showPassword ? <EyeClosedIcon /> : <EyeIcon />}
           </button>
         </div>
         {error && (
