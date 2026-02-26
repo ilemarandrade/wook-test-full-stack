@@ -1,7 +1,7 @@
 import { NextFunction, Response } from 'express';
 import { validationResult } from 'express-validator';
-import handleTraductions from '../../utils/handleTraductions.js';
-import { IRequest } from '../../models/Request.js';
+import handleTraductions from '../../utils/handleTraductions';
+import { IRequest } from '../../models/Request';
 
 const validateRequest = (req: IRequest, res: Response, next: NextFunction) => {
   const errors = validationResult(req);

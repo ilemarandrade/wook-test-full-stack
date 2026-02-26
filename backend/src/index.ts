@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
-import v1RouterAuth from './v1/routes/auth.js';
-// import { transporter } from './utils/sendEmail.js';
+import v1RouterAuth from './v1/routes/auth';
+// import { transporter } from './utils/sendEmail';
 import dotenv from 'dotenv';
 
 dotenv.config();

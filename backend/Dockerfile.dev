@@ -5,12 +5,13 @@ WORKDIR /usr/src/app
 # Dependencias del sistema mínimas para Prisma y Postgres
 RUN apk add --no-cache openssl bash curl netcat-openbsd
 
-# Copiar package.json y package-lock.json primero para aprovechar la cache de Docker
+# Copiar package.json, package-lock.json y prisma para que postinstall (prisma generate) encuentre el schema
 COPY package*.json ./
+COPY prisma ./prisma/
 
 RUN npm install
 
-# Copiar el resto del código del backend (incluye src, prisma, configs, etc.)
+# Copiar el resto del código del backend
 COPY . .
 
 # Puerto expuesto por el backend (configurado también vía PORT en docker-compose)

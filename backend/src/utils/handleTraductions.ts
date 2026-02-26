@@ -1,5 +1,5 @@
-import en from '../constants/traductions/en.js';
-import es, { TypesTraductions } from '../constants/traductions/es.js';
+import en from '../constants/traductions/en';
+import es, { TypesTraductions } from '../constants/traductions/es';
 
 const handleTraductions = (lang: string = 'en') => {
   const traductions: { [key: string]: TypesTraductions } = { en, es };

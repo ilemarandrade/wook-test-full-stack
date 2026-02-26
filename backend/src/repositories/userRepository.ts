@@ -1,5 +1,5 @@
 import { User } from '@prisma/client';
-import prisma from '../prisma/client.js';
+import prisma from '../prisma/client';
 
 export interface CreateUserData {
   name: string;

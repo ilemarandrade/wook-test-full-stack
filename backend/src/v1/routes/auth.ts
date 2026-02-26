@@ -1,14 +1,14 @@
 import express from 'express';
-import authController from '../../controllers/authControllers.js';
-import verifyUserToken from '../../midlewares/verifyUserToken.js';
+import authController from '../../controllers/authControllers';
+import verifyUserToken from '../../midlewares/verifyUserToken';
 import {
   loginValidator,
   signupValidator,
   updateUserValidator,
   forgotPasswordValidator,
   newPasswordValidator,
-} from '../../midlewares/validators/authValidators.js';
-import validateRequest from '../../midlewares/validators/validateRequest.js';
+} from '../../midlewares/validators/authValidators';
+import validateRequest from '../../midlewares/validators/validateRequest';
 
 const router = express.Router();
 

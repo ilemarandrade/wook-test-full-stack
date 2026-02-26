@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
-import handleTraductions from '../utils/handleTraductions.js';
-import { IRequest } from '../models/Request.js';
+import handleTraductions from '../utils/handleTraductions';
+import { IRequest } from '../models/Request';
 import { NextFunction, Response } from 'express';
 
 const verifyUserToken = async (

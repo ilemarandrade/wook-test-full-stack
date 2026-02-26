@@ -1,10 +1,10 @@
 import jwt from 'jsonwebtoken';
-import handleTraductions from '../utils/handleTraductions.js';
-import { transporter } from '../utils/sendEmail.js';
-import recoveryPasswordMail from '../constants/mails/recoveryPassword.js';
-import { encrypt, compare } from '../utils/encryptPassword.js';
-import { IResponseServices, Lang } from '../models/Request.js';
-import { userRepository } from '../repositories/userRepository.js';
+import handleTraductions from '../utils/handleTraductions';
+import { transporter } from '../utils/sendEmail';
+import recoveryPasswordMail from '../constants/mails/recoveryPassword';
+import { encrypt, compare } from '../utils/encryptPassword';
+import { IResponseServices, Lang } from '../models/Request';
+import { userRepository } from '../repositories/userRepository';
 
 interface ILogin {
   user: {
@@ -282,7 +282,7 @@ const newPassword = async ({
     await userRepository.updateResetPasswordToken(id, '');
 
     // Actualizar password directamente usando prisma para no exponerlo en DTOs
-    await (await import('../prisma/client.js')).default.user.update({
+    await (await import('../prisma/client')).default.user.update({
       where: { id },
       data: { password: newPasswordFormat },
     });

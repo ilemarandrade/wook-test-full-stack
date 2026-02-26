@@ -1,8 +1,8 @@
-import authServices from '../services/authServices.js';
+import authServices from '../services/authServices';
 import jwt from 'jsonwebtoken';
-import handleTraductions from '../utils/handleTraductions.js';
+import handleTraductions from '../utils/handleTraductions';
 import { Response } from 'express';
-import { IRequest } from '../models/Request.js';
+import { IRequest } from '../models/Request';
 
 const login = async (req: IRequest, res: Response) => {
   const { lang = 'en' } = req.headers;
