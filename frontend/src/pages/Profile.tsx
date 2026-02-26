@@ -4,14 +4,15 @@ import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { ProfileFormValues, profileSchema } from '../schemas/authSchemas';
 import { TextFieldControlled } from '../components/form/TextFieldControlled';
-import { useUpdateProfileMutation } from '../hooks/api';
+import { useUpdateProfileMutation, useUserInformation } from '../hooks/api';
 import { getApiErrorMessage } from '../config/axiosInstance';
 
 const Profile: React.FC = () => {
-  const { user, token, logout, login } = useAuth();
+  const {  token, logout, login } = useAuth();
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const { data: user, isLoading: isLoadingUser } = useUserInformation(!!token);
   const updateProfileMutation = useUpdateProfileMutation(token);
   const {
     control,
@@ -32,25 +33,26 @@ const Profile: React.FC = () => {
       phone: user.phone,
       lang: user.lang ?? 'en',
     });
-  }, [user, reset]);
+    if (token) {
+      login(token, user);
+    }
+  }, [user, token, reset, login]);
 
-  if (!user) {
-    return null;
-  }
+  const profileUser = user;
 
   const onSubmit = (values: ProfileFormValues) => {
     setError(null);
     setMessage(null);
-    if (!token) return;
+    if (!token || !profileUser) return;
     updateProfileMutation.mutate(values, {
       onSuccess: (data) => {
         setMessage(data.message ?? 'Profile updated');
         login(token, {
-          ...user,
+          ...profileUser,
           name: values.name,
-          lastname: values.lastname ?? user.lastname,
+          lastname: values.lastname ?? profileUser.lastname,
           document: values.document,
-          phone: values.phone ?? user.phone,
+          phone: values.phone ?? profileUser.phone,
           lang: values.lang,
         });
       },
@@ -59,6 +61,15 @@ const Profile: React.FC = () => {
       },
     });
   };
+
+
+  if (isLoadingUser) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4">
+        <p className="text-slate-400">Loading profile...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
