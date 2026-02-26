@@ -1,10 +1,8 @@
 import React from 'react';
-import { Routes, Route, Navigate, Link } from 'react-router-dom';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Profile from './pages/Profile';
-import ProtectedRoute from './components/ProtectedRoute';
+import { Link } from 'react-router-dom';
+
 import { AuthProvider, useAuth } from './context/AuthContext';
+import AppRoutes from './Routes';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user } = useAuth();
@@ -23,8 +21,6 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               </>
             ) : (
               <>
-                <Link to="/login">Login</Link>
-                <Link to="/register">Register</Link>
               </>
             )}
           </nav>
@@ -35,49 +31,13 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   );
 };
 
-const AppRoutes: React.FC = () => (
-  <Routes>
-    <Route
-      path="/"
-      element={<Navigate to="/login" replace />}
-    />
-    <Route
-      path="/login"
-      element={
-        <Layout>
-          <Login />
-        </Layout>
-      }
-    />
-    <Route
-      path="/register"
-      element={
-        <Layout>
-          <Register />
-        </Layout>
-      }
-    />
-    <Route
-      path="/profile"
-      element={
-        <Layout>
-          <ProtectedRoute>
-            <Profile />
-          </ProtectedRoute>
-        </Layout>
-      }
-    />
-    <Route
-      path="*"
-      element={<Navigate to="/login" replace />}
-    />
-  </Routes>
-);
 
 const App: React.FC = () => {
   return (
     <AuthProvider>
-      <AppRoutes />
+      <Layout>
+        <AppRoutes />
+      </Layout>
     </AuthProvider>
   );
 };
