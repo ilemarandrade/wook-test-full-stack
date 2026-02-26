@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
-import ProtectedRoute from './ProtectedRoute';
-import { AuthProvider } from '../context/AuthContext';
+import ProtectedRoute from './index';
+import { AuthProvider } from '../../context/AuthContext';
 
 const ProtectedPage: React.FC = () => <div>Protected content</div>;
 const LoginPage: React.FC = () => <div>Login page</div>;
