@@ -1,6 +1,6 @@
 import express from 'express';
 import authController from '../../controllers/authControllers.js';
-import verifyUserToken from '../../midlewares/verify_user_token.js';
+import verifyUserToken from '../../midlewares/verifyUserToken.js';
 import {
   loginValidator,
   signupValidator,
