@@ -21,7 +21,9 @@ interface IResponseLogin {
   message?: string;
 }
 
-const JWT_SECRET = process.env.JWT_SECRET || process.env.SECRET_JWT || '';
+const getJwtSecret = () => {
+  return process.env.JWT_SECRET || process.env.SECRET_JWT || 'default-test-secret';
+};
 
 const login = async ({
   user,
@@ -63,7 +65,7 @@ const login = async ({
       {
         user: userPayload,
       },
-      JWT_SECRET
+      getJwtSecret()
     );
 
     return {
@@ -205,7 +207,7 @@ const forgotPassword = async ({
 
     const token_to_reset_password = jwt.sign(
       { User: { id: user.id } },
-      JWT_SECRET,
+      getJwtSecret(),
       { expiresIn: '10m' }
     );
 
@@ -265,7 +267,7 @@ const newPassword = async ({
 
     const {
       User: { id },
-    } = jwt.verify(token, JWT_SECRET) as JwtPayload;
+    } = jwt.verify(token, getJwtSecret()) as JwtPayload;
 
     const user = await userRepository.findById(id);
 
