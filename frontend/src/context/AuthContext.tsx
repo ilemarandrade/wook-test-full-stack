@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 
-interface User {
+export interface User {
   id: string;
   name: string;
   lastname: string;
@@ -14,7 +14,7 @@ interface User {
 interface AuthContextValue {
   user: User | null;
   token: string | null;
-  login: (token: string, user: User) => void;
+  login: (token: string, user?: User) => void;
   logout: () => void;
 }
 
@@ -22,11 +22,16 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 const STORAGE_KEY = 'woow_auth';
 
-function getStoredAuth(): { token: string; user: User } | null {
+type StoredAuth = {
+  token: string;
+  user?: User;
+};
+
+function getStoredAuth(): StoredAuth | null {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (!stored) return null;
-    return JSON.parse(stored) as { token: string; user: User };
+    return JSON.parse(stored) as StoredAuth;
   } catch {
     return null;
   }
@@ -35,18 +40,17 @@ function getStoredAuth(): { token: string; user: User } | null {
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [auth, setAuth] = useState<{ user: User; token: string } | null>(() =>
-    getStoredAuth()
-  );
+  const [auth, setAuth] = useState<StoredAuth | null>(() => getStoredAuth());
   const user = auth?.user ?? null;
   const token = auth?.token ?? null;
 
-  const login = (newToken: string, newUser: User) => {
-    setAuth({ token: newToken, user: newUser });
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({ token: newToken, user: newUser })
-    );
+  const login = (newToken: string, newUser?: User) => {
+    const nextAuth: StoredAuth = newUser
+      ? { token: newToken, user: newUser }
+      : { token: newToken };
+
+    setAuth(nextAuth);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(nextAuth));
   };
 
   const logout = () => {
