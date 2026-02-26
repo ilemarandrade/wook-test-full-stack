@@ -6,6 +6,11 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
+    host: true,
+    watch: {
+      // Necesario en Docker: los volúmenes montados no propagan inotify al contenedor
+      usePolling: !!process.env.VITE_DOCKER,
+    },
   },
   test: {
     globals: true,
