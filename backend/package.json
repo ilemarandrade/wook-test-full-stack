@@ -15,8 +15,7 @@
     "test:coverage": "jest --coverage",
     "lint": "eslint . --ext .ts",
     "lint-fix": "eslint . --ext .ts --fix",
-    "format": "npx prettier --write \"src/**/*.ts\"",
-    "seed:users": "ts-node-dev --transpile-only src/scripts/seedUsers.ts"
+    "format": "npx prettier --write \"src/**/*.ts\""
   },
   "keywords": [],
   "author": "",
