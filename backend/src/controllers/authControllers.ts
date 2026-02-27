@@ -45,7 +45,7 @@ const createNewUser = async (req: IRequest, res: Response) => {
 
 const updateUser = async (req: IRequest, res: Response) => {
   const { lang = 'en' } = req.headers;
-  const { user: prevUserData } = req.user; // data save from midleware that verify token
+  const prevUserData = { user: req.user.user }; // from middleware JWT payload
   const dataToUpdateUser = req.body.user;
 
   const { statusCode, response } = await authServices.updateUser({

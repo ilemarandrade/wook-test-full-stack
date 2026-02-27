@@ -159,9 +159,7 @@ const updateUser = async ({
   dataToUpdateUser,
   langCurrent,
 }: IUpdateUser): Promise<IResponseServices> => {
-  const {
-    user: { id, lang },
-  } = prevUserData;
+  const { user: { id, lang } } = prevUserData;
   const { t } = handleTraductions(dataToUpdateUser.lang || lang || langCurrent);
 
   try {
