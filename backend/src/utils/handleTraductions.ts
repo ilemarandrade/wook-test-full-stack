@@ -3,18 +3,18 @@ import es, { TypesTraductions } from '../constants/traductions/es';
 
 const handleTraductions = (lang: string = 'en') => {
   const traductions: { [key: string]: TypesTraductions } = { en, es };
-  const selectedTraductions = traductions[lang];
+  const selectedTraductions = traductions[lang] ?? traductions.en;
 
   const t = (value: string): string => {
-    const valueSplit = value.split('.');
-    let findValue: string | TypesTraductions | undefined;
+    const keys = value.split('.');
+    let current: TypesTraductions | string | undefined = selectedTraductions;
 
-    valueSplit.reduce((acumulator: TypesTraductions, key) => {
-      findValue = acumulator[key];
-      return acumulator;
-    }, selectedTraductions);
+    for (const key of keys) {
+      if (!current || typeof current === 'string') break;
+      current = current[key];
+    }
 
-    return (findValue as string) || '';
+    return typeof current === 'string' ? current : '';
   };
 
   return { t };

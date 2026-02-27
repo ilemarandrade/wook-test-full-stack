@@ -11,8 +11,8 @@ const validateRequest = (req: IRequest, res: Response, next: NextFunction) => {
     const { t } = handleTraductions(lang);
 
     return res.status(400).json({
-      message: t('message.error_unexpected'),
-      errors: errors.array(),
+        message: t('message.bad_request.dto_invalid'),
+        errors: errors.mapped(),
     });
   }
 

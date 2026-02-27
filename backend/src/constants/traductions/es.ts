@@ -8,6 +8,9 @@ const es: TypesTraductions = {
     success: 'Solicitud Exitosa!',
     create_user: { success: 'Estamos alegres que te hayas unido!' },
     authorization_incorrect: 'Inicia sesión para continuar.',
+    bad_request: {
+      dto_invalid: 'Los datos enviados no son válidos',
+    },
     login: {
       wrong_data: 'El email o la contraseña no son correctos',
     },
