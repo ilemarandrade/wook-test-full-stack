@@ -49,7 +49,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [auth, setAuth] = useState<StoredAuth | null>(() => getStoredAuth());
   const user = auth?.user ?? null;
-  const token = auth?.token ?? null;
+  const token = getStoredAuth()?.token || auth?.token || null;
+
 
   const login = useCallback((newToken: string, newUser?: User) => {
     const nextAuth: StoredAuth = newUser
@@ -80,7 +81,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   useEffect(() => {
-    getUserInformation();
+    if(token) {
+      getUserInformation();
+    }
   }, []);
 
   return (
