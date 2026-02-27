@@ -18,10 +18,11 @@ describe('PasswordInput', () => {
     const input = screen.getByLabelText('Password') as HTMLInputElement;
     expect(input.type).toBe('password');
 
-    await user.click(screen.getByText('Show'));
+    const toggleButton = screen.getByRole('button');
+    await user.click(toggleButton);
     expect(input.type).toBe('text');
 
-    await user.click(screen.getByText('Hide'));
+    await user.click(toggleButton);
     expect(input.type).toBe('password');
   });
 

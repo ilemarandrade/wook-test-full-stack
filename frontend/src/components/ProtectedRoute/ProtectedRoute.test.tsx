@@ -1,8 +1,14 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './index';
 import { AuthProvider } from '../../context/AuthContext';
+
+vi.mock('../../services/authService', () => ({
+  authService: {
+    getCurrentUser: vi.fn().mockResolvedValue(null),
+  },
+}));
 
 const ProtectedPage: React.FC = () => <div>Protected content</div>;
 const LoginPage: React.FC = () => <div>Login page</div>;

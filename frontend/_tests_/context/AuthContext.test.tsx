@@ -1,7 +1,13 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { AuthProvider, useAuth } from './AuthContext';
+import { AuthProvider, useAuth } from '../../src/context/AuthContext';
+
+vi.mock('../../src/services/authService', () => ({
+  authService: {
+    getCurrentUser: vi.fn().mockResolvedValue(null),
+  },
+}));
 
 const TestConsumer: React.FC = () => {
   const { user, token, login, logout } = useAuth();
