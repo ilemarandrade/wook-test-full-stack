@@ -71,6 +71,9 @@ Para desarrollo **local sin Docker**, en `backend/` copia `.env.example` a `.env
 
 Desde la raíz del repositorio:
 
+- **Desarrollo (hot reload):** `docker compose up --build`
+- **Producción:** `docker compose -f docker-compose.prod.yml up --build`
+
 ```bash
 docker compose up --build
 ```
