@@ -1,4 +1,5 @@
-import React, { createContext, useCallback, useContext, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { useUserInformation } from '../hooks/api';
 
 export interface User {
   id: string;
@@ -40,6 +41,7 @@ function getStoredAuth(): StoredAuth | null {
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const {data: userInformation} = useUserInformation();
   const [auth, setAuth] = useState<StoredAuth | null>(() => getStoredAuth());
   const user = auth?.user ?? null;
   const token = auth?.token ?? null;
@@ -57,6 +59,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setAuth(null);
     localStorage.removeItem(STORAGE_KEY);
   }, []);
+
+  useEffect(() => {
+    if (userInformation) {
+      setAuth({
+        user: {...userInformation},
+        token: getStoredAuth()?.token ?? '',
+      });
+    }
+  }, [userInformation]);
 
   return (
     <AuthContext.Provider value={{ user, token, login, logout }}>

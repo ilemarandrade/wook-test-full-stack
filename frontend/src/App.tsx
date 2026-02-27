@@ -1,11 +1,11 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
-import { AuthProvider, useAuth } from './context/AuthContext';
-import AppRoutes from './Routes';
+import { AuthProvider, useAuth } from "./context/AuthContext";
+import AppRoutes from "./Routes";
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -17,11 +17,17 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           <nav className="flex gap-4 text-sm text-slate-300">
             {user ? (
               <>
+                {user.role === "ADMIN" && <Link to="/user-list">Users</Link>}
                 <Link to="/profile">Profile</Link>
+                <button
+                  onClick={logout}
+                  className="text-sm text-red-300 hover:text-red-200"
+                >
+                  Logout
+                </button>
               </>
             ) : (
-              <>
-              </>
+              <></>
             )}
           </nav>
         </div>
@@ -30,7 +36,6 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     </div>
   );
 };
-
 
 const App: React.FC = () => {
   return (
@@ -43,4 +48,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-

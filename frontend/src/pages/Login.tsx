@@ -28,7 +28,7 @@ const Login: React.FC = () => {
     loginMutation.mutate(values, {
       onSuccess: (data) => {
         login(data.jwt);
-        navigate('/profile');
+        navigate('/user-list');
       },
       onError: (err) => {
         setError(getApiErrorMessage(err));

@@ -9,10 +9,14 @@ import { useUpdateProfileMutation, useUserInformation } from "../hooks/api";
 import { getApiErrorMessage } from "../config/axiosInstance";
 
 const Profile: React.FC = () => {
-  const { token, logout, login } = useAuth();
+  const { login } = useAuth();
   const [error, setError] = useState<string | null>(null);
 
-  const { data: user, isLoading: isLoadingUser, refetch: refetchUser } = useUserInformation(!!token);
+  const {
+    data: user,
+    isLoading: isLoadingUser,
+    refetch: refetchUser,
+  } = useUserInformation();
   const updateProfileMutation = useUpdateProfileMutation();
   const {
     control,
@@ -25,7 +29,7 @@ const Profile: React.FC = () => {
   });
 
   useEffect(() => {
-    if (!user || !token) return;
+    if (!user) return;
     reset({
       name: user.name,
       lastname: user.lastname,
@@ -33,13 +37,13 @@ const Profile: React.FC = () => {
       phone: user.phone,
       lang: user.lang ?? "en",
     });
-  }, [user, token, reset, login]);
+  }, [user, reset, login]);
 
   const profileUser = user;
 
   const onSubmit = (values: ProfileFormValues) => {
     setError(null);
-    if (!token || !profileUser) return;
+    if (!profileUser) return;
     updateProfileMutation.mutate(
       {
         ...values,
@@ -69,12 +73,6 @@ const Profile: React.FC = () => {
       <div className="w-full max-w-xl bg-slate-900/70 border border-slate-800 rounded-xl p-8 shadow-xl">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-semibold">Profile</h1>
-          <button
-            onClick={logout}
-            className="text-sm text-red-300 hover:text-red-200"
-          >
-            Logout
-          </button>
         </div>
         {error && (
           <div className="mb-4 text-sm text-red-400 bg-red-900/30 border border-red-700 rounded px-3 py-2">
@@ -113,7 +111,9 @@ const Profile: React.FC = () => {
           </div>
           <button
             type="submit"
-            disabled={isSubmitting || updateProfileMutation.isPending || !isDirty}
+            disabled={
+              isSubmitting || updateProfileMutation.isPending || !isDirty
+            }
             className="w-full mt-2 inline-flex justify-center rounded-md bg-sky-600 px-4 py-2 text-sm font-medium text-white hover:bg-sky-500 disabled:bg-slate-600"
           >
             {isSubmitting || updateProfileMutation.isPending
