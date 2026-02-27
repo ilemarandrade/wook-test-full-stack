@@ -9,11 +9,25 @@ export const loginValidator = [
 
 export const signupValidator = [
   body('user.name').notEmpty().withMessage('Name is required'),
+  body('user.lastname').notEmpty().withMessage('Lastname is required'),
   body('user.email').isEmail().withMessage('Email is invalid'),
   body('user.password')
     .isLength({ min: 6 })
     .withMessage('Password must be at least 6 characters'),
-  body('user.document').notEmpty().withMessage('Document is required'),
+  body('user.document')
+    .notEmpty()
+    .withMessage('Document is required')
+    .matches(/^\d+$/)
+    .withMessage('Document must contain only numbers')
+    .isLength({ min: 7, max: 15 })
+    .withMessage('Document must be between 7 and 15 digits long'),
+  body('user.phone')
+    .notEmpty()
+    .withMessage('Phone is required')
+    .matches(/^\d+$/)
+    .withMessage('Phone must contain only numbers')
+    .isLength({ min: 7, max: 15 })
+    .withMessage('Phone must be between 7 and 15 digits long'),
 ];
 
 export const updateUserValidator = [
