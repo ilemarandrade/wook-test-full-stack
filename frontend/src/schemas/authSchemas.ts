@@ -7,10 +7,10 @@ export interface LoginFormValues {
 
 export const loginSchema = Joi.object<LoginFormValues>({
   email: Joi.string()
-    .email({ tlds: { allow: false } })
+    .email()
     .required()
     .label('Email'),
-  password: Joi.string().min(6).required().label('Password'),
+  password: Joi.string().min(8).required().label('Password'),
 });
 
 export interface RegisterFormValues {
@@ -25,14 +25,24 @@ export interface RegisterFormValues {
 
 export const registerSchema = Joi.object<RegisterFormValues>({
   name: Joi.string().min(2).max(100).required().label('Name'),
-  lastname: Joi.string().allow('', null).label('Lastname'),
+  lastname: Joi.string().min(2).max(100).required().label('Lastname'),
   email: Joi.string()
     .email({ tlds: { allow: false } })
     .required()
     .label('Email'),
-  document: Joi.string().min(3).max(50).required().label('Document'),
-  phone: Joi.string().allow('', null).label('Phone'),
-  password: Joi.string().min(6).required().label('Password'),
+  document: Joi.string()
+    .pattern(/^\d+$/)
+    .min(7)
+    .max(15)
+    .required()
+    .label('Document'),
+  phone: Joi.string()
+    .pattern(/^\d+$/)
+    .min(7)
+    .max(15)
+    .required()
+    .label('Phone'),
+  password: Joi.string().min(8).required().label('Password'),
   confirmPassword: Joi.string()
     .valid(Joi.ref('password'))
     .required()
@@ -52,9 +62,19 @@ export interface ProfileFormValues {
 
 export const profileSchema = Joi.object<ProfileFormValues>({
   name: Joi.string().min(2).max(100).required().label('Name'),
-  lastname: Joi.string().allow('', null).label('Lastname'),
-  document: Joi.string().min(3).max(50).required().label('Document'),
-  phone: Joi.string().allow('', null).label('Phone'),
+  lastname: Joi.string().min(2).max(100).required().label('Lastname'),
+  document: Joi.string()
+    .pattern(/^\d+$/)
+    .min(7)
+    .max(15)
+    .required()
+    .label('Document'),
+  phone: Joi.string()
+    .pattern(/^\d+$/)
+    .min(7)
+    .max(15)
+    .required()
+    .label('Phone'),
   lang: Joi.string().valid('en', 'es').required().label('Language'),
 });
 
