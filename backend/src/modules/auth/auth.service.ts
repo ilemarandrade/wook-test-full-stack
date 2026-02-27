@@ -103,8 +103,11 @@ const createUser = async ({
     const userExistWithThisDocument = await userRepository.findByDocument(
       user.document
     );
+    const userExistWithThisPhone = user.phone
+      ? await userRepository.findByPhone(user.phone)
+      : null;
 
-    if (userExistWithThisEmail || userExistWithThisDocument) {
+    if (userExistWithThisEmail || userExistWithThisDocument || userExistWithThisPhone) {
       return {
         statusCode: 400,
         response: { message: t('message.sign_up.user_exist') },

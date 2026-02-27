@@ -16,7 +16,7 @@ const es: TypesTraductions = {
     },
     sign_up: {
       user_exist:
-        'Ya existe una cuenta asociada a este correo electrónico o documento',
+        'Ya existe una cuenta asociada a este correo electrónico o documento o teléfono',
     },
     forgot_password: {
       check_your_email:

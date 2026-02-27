@@ -14,7 +14,7 @@ const en: TypesTraductions = {
     },
     sign_up: {
       user_exist:
-        'There is already an account associated with this email or document',
+        'There is already an account associated with this email or document or phone',
     },
     forgot_password: {
       check_your_email:
