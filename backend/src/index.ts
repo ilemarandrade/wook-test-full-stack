@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { validateEnv } from './config/envSchema';
-import v1RouterAuth from './v1/routes/auth';
+import V1Router from './v1/routes';
 
 dotenv.config();
 validateEnv();
@@ -24,7 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 // *** call to version 1 routes ***
-app.use('/api/v1/auth', v1RouterAuth);
+app.use('/api/v1', V1Router);
 
 app.listen(PORT, () => {
   console.log(`API is listening on port ${PORT}`);

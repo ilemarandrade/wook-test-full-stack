@@ -1,5 +1,5 @@
 import { User } from '@prisma/client';
-import prisma from '../prisma/client';
+import prisma from '../../prisma/client';
 
 export interface CreateUserData {
   name: string;
@@ -78,4 +78,5 @@ class PrismaUserRepository implements IUserRepository {
 }
 
 export const userRepository = new PrismaUserRepository();
+
 
