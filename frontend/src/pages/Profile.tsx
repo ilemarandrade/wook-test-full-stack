@@ -81,11 +81,17 @@ const Profile: React.FC = () => {
         )}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
-            <TextFieldControlled name="name" control={control} label="Name" />
+            <TextFieldControlled
+              name="name"
+              control={control}
+              label="Name"
+              inputFilterType="letters"
+            />
             <TextFieldControlled
               name="lastname"
               control={control}
               label="Lastname"
+              inputFilterType="letters"
             />
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -93,8 +99,14 @@ const Profile: React.FC = () => {
               name="document"
               control={control}
               label="Document"
+              inputFilterType="numbers"
             />
-            <TextFieldControlled name="phone" control={control} label="Phone" />
+            <TextFieldControlled
+              name="phone"
+              control={control}
+              label="Phone"
+              inputFilterType="numbers"
+            />
           </div>
           <div>
             <label className="block text-sm mb-1" htmlFor="lang">

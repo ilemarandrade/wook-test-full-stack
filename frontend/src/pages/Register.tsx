@@ -50,11 +50,13 @@ const Register: React.FC = () => {
               name="name"
               control={control}
               label="Name"
+              inputFilterType="letters"
             />
             <TextFieldControlled
               name="lastname"
               control={control}
               label="Lastname"
+              inputFilterType="letters"
             />
           </div>
           <TextFieldControlled
@@ -67,11 +69,13 @@ const Register: React.FC = () => {
             name="document"
             control={control}
             label="Document"
+            inputFilterType="numbers"
           />
           <TextFieldControlled
             name="phone"
             control={control}
             label="Phone"
+            inputFilterType="numbers"
           />
           <div className="grid grid-cols-2 gap-3">
             <PasswordFieldControlled
