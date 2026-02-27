@@ -23,6 +23,7 @@ export interface IUserRepository {
   findById(id: string): Promise<User | null>;
   findByEmail(email: string): Promise<User | null>;
   findByDocument(document: string): Promise<User | null>;
+  findAll(): Promise<User[]>;
   create(data: CreateUserData): Promise<User>;
   update(id: string, data: UpdateUserData): Promise<User>;
   updateResetPasswordToken(id: string, token: string): Promise<User>;
@@ -40,6 +41,10 @@ class PrismaUserRepository implements IUserRepository {
 
   async findByDocument(document: string): Promise<User | null> {
     return prisma.user.findFirst({ where: { document } });
+  }
+
+  async findAll(): Promise<User[]> {
+    return prisma.user.findMany();
   }
 
   async create(data: CreateUserData): Promise<User> {

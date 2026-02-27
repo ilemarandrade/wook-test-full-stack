@@ -1,6 +1,7 @@
 import handleTraductions from '../../utils/handleTraductions';
 import { IResponseServices, Lang } from '../../models/Request';
 import { userRepository } from './users.repository';
+import { User } from '@prisma/client';
 
 interface IUpdateMeInput {
   dataToUpdateUser: {
@@ -37,4 +38,20 @@ export const updateMe = async ({
   }
 };
 
+export const listUsers = async (): Promise<IResponseServices<{ users: Omit<User, 'password'>[] }>> => {
+  try {
+    const rawUsers = await userRepository.findAll();
+    const users = rawUsers.map(({ password, ...rest }) => rest);
+    return {
+      statusCode: 200,
+      response: { users },
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      statusCode: 400,
+      response: { users: [] },
+    };
+  }
+};
 

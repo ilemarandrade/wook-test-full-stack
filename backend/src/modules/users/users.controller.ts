@@ -2,7 +2,7 @@ import { Response } from 'express';
 import { IRequest } from '../../models/Request';
 import handleTraductions from '../../utils/handleTraductions';
 import { userRepository } from './users.repository';
-import { updateMe as updateMeService } from './users.service';
+import { updateMe as updateMeService, listUsers as listUsersService } from './users.service';
 
 export const getMe = async (req: IRequest, res: Response) => {
   const { lang = 'en' } = req.headers;
@@ -47,4 +47,8 @@ export const updateMe = async (req: IRequest, res: Response) => {
   res.status(statusCode).send(response);
 };
 
+export const listUsers = async (_req: IRequest, res: Response) => {
+  const { statusCode, response } = await listUsersService();
+  res.status(statusCode).send(response);
+};
 
