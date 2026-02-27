@@ -41,8 +41,13 @@ export const updateMe = async ({
   const { t } = handleTraductions(dataToUpdateUser.lang || langCurrent);
 
   const { id: userId, ...dataToSave } = dataToUpdateUser;
+
+  const dataToSaveCleaned = Object.fromEntries(
+    Object.entries(dataToSave).filter(([, value]) => value !== undefined && value !== '')
+  );
+
   try {
-    await userRepository.update(userId, dataToSave);
+    await userRepository.update(userId, dataToSaveCleaned);
 
     return {
       statusCode: 200,
