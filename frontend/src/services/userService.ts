@@ -10,9 +10,31 @@ export interface ListUsersResponse {
   prevPage?: number;
 }
 
+export interface ListUsersParams {
+  page: number;
+  pageSize: number;
+  name?: string;
+  document?: string;
+  phone?: string;
+}
+
 export const userService = {
-  listUsers: async (): Promise<ListUsersResponse> => {
-    const data = await apiClient.get<ListUsersResponse>("/users");
+  listUsers: async ({
+    page,
+    pageSize,
+    name,
+    document,
+    phone,
+  }: ListUsersParams): Promise<ListUsersResponse> => {
+    const data = await apiClient.get<ListUsersResponse>("/users", {
+      params: {
+        page,
+        pageSize,
+        name: name || undefined,
+        document: document || undefined,
+        phone: phone || undefined,
+      },
+    });
     return data;
   },
 };

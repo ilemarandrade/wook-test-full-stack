@@ -3,7 +3,6 @@ import { getApiErrorMessage } from '../config/axiosInstance';
 import { useUserTableState } from '../hooks/users/useUserTableState';
 import { useUserFilters, type UserFilterValues } from '../hooks/users/useUserFilters';
 import { useUserListQuery } from '../hooks/api';
-import type { UserListQueryData } from '../hooks/api/useUserListQuery';
 import { UserFilterForm } from '../components/users/UserFilterForm';
 import { UserTable } from '../components/users/UserTable';
 
@@ -23,7 +22,7 @@ const UserList: React.FC = () => {
     error,
   } = useUserListQuery({
     page,
-    pageSize: 1,
+    pageSize,
     filters: appliedFilters,
     searchVersion,
   });
@@ -61,7 +60,7 @@ const UserList: React.FC = () => {
           users={data?.users ?? []}
           isLoading={isLoading}
           errorMessage={errorMessage}
-          page={data?.page ?? 1}
+          page={data?.page ?? page}
           pageSize={pageSize}
           total={data?.itemsTotal ?? 0}
           pageSizeOptions={pageSizeOptions}

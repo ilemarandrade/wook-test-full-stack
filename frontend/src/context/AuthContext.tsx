@@ -1,5 +1,11 @@
-import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
-import { useUserInformation } from '../hooks/api';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { authService } from "../services/authService";
 
 export interface User {
   id: string;
@@ -21,7 +27,7 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-const STORAGE_KEY = 'woow_auth';
+const STORAGE_KEY = "woow_auth";
 
 type StoredAuth = {
   token: string;
@@ -41,7 +47,6 @@ function getStoredAuth(): StoredAuth | null {
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const {data: userInformation} = useUserInformation();
   const [auth, setAuth] = useState<StoredAuth | null>(() => getStoredAuth());
   const user = auth?.user ?? null;
   const token = auth?.token ?? null;
@@ -53,6 +58,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
     setAuth(nextAuth);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(nextAuth));
+
+    
+    getUserInformation();
   }, []);
 
   const logout = useCallback(() => {
@@ -60,14 +68,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     localStorage.removeItem(STORAGE_KEY);
   }, []);
 
+  const getUserInformation = useCallback(() => {
+    authService.getCurrentUser().then((data)=>{
+      if (data) {
+        setAuth({
+          user: { ...data },
+          token: getStoredAuth()?.token ?? ""
+        });
+      }
+    });
+  }, []);
+
   useEffect(() => {
-    if (userInformation) {
-      setAuth({
-        user: {...userInformation},
-        token: getStoredAuth()?.token ?? '',
-      });
-    }
-  }, [userInformation]);
+    getUserInformation();
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, token, login, logout }}>
@@ -79,8 +93,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 export const useAuth = (): AuthContextValue => {
   const ctx = useContext(AuthContext);
   if (!ctx) {
-    throw new Error('useAuth must be used within AuthProvider');
+    throw new Error("useAuth must be used within AuthProvider");
   }
   return ctx;
 };
-
