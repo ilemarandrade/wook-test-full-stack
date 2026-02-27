@@ -3,34 +3,26 @@ import authController from '../../modules/auth/auth.controller';
 import {
   loginValidator,
   signupValidator,
-  forgotPasswordValidator,
-  newPasswordValidator,
 } from '../../midlewares/validators/authValidators';
 import validateRequest from '../../midlewares/validators/validateRequest';
+import { mapToDto } from '../../midlewares/validators/mapToDto';
+import { toLoginDto } from '../../modules/auth/dtos/LoginDto';
 
 const router = express.Router();
 
-router.post('/login', loginValidator, validateRequest, authController.login);
+router.post(
+  '/login',
+  loginValidator,
+  validateRequest,
+  mapToDto(toLoginDto, 'body'),
+  authController.login
+);
 
 router.post(
   '/register',
   signupValidator,
   validateRequest,
   authController.createNewUser
-);
-
-router.post(
-  '/forgot_password',
-  forgotPasswordValidator,
-  validateRequest,
-  authController.forgotPassword
-);
-
-router.put(
-  '/new_password',
-  newPasswordValidator,
-  validateRequest,
-  authController.newPassword
 );
 
 export default router;

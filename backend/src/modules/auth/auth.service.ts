@@ -1,7 +1,5 @@
 import jwt from 'jsonwebtoken';
 import handleTraductions from '../../utils/handleTraductions';
-import { transporter } from '../../utils/sendEmail';
-import recoveryPasswordMail from '../../constants/mails/recoveryPassword';
 import { encrypt, compare } from '../../utils/encryptPassword';
 import { IResponseServices, Lang } from '../../models/Request';
 import { getJwtSecret } from '../../utils/jwtHelper';
@@ -107,7 +105,11 @@ const createUser = async ({
       ? await userRepository.findByPhone(user.phone)
       : null;
 
-    if (userExistWithThisEmail || userExistWithThisDocument || userExistWithThisPhone) {
+    if (
+      userExistWithThisEmail ||
+      userExistWithThisDocument ||
+      userExistWithThisPhone
+    ) {
       return {
         statusCode: 400,
         response: { message: t('message.sign_up.user_exist') },
@@ -139,128 +141,4 @@ const createUser = async ({
   }
 };
 
-interface IForgotPassword {
-  lang: Lang;
-  email: string;
-}
-
-const forgotPassword = async ({
-  lang,
-  email,
-}: IForgotPassword): Promise<IResponseServices> => {
-  const { t } = handleTraductions(lang);
-
-  try {
-    const user = await userRepository.findByEmail(email);
-
-    if (!user) {
-      return {
-        statusCode: 400,
-        response: { message: t('message.login.wrong.data') },
-      };
-    }
-
-    const token_to_reset_password = jwt.sign(
-      { User: { id: user.id } },
-      getJwtSecret(),
-      { expiresIn: '10m' }
-    );
-
-    await userRepository.updateResetPasswordToken(user.id, token_to_reset_password);
-
-    await transporter.sendMail({
-      from: 'Wallet Andrade',
-      to: email,
-      subject: t('message.forgot_password.title_email'),
-      text: t('message.forgot_password.title_email'),
-      html: recoveryPasswordMail[lang](token_to_reset_password),
-    });
-
-    return {
-      statusCode: 200,
-      response: { message: t('message.forgot_password.check_your_email') },
-    };
-  } catch (error) {
-    console.log(error);
-    return {
-      statusCode: 400,
-      response: { message: t('message.error_unexpected') },
-    };
-  }
-};
-
-interface INewPassword {
-  lang: Lang;
-  password: string;
-  confirmation_password: string;
-  token: string;
-}
-
-interface JwtPayload {
-  User: {
-    id: string;
-  };
-}
-
-const newPassword = async ({
-  lang,
-  password,
-  confirmation_password,
-  token,
-}: INewPassword): Promise<IResponseServices> => {
-  const { t } = handleTraductions(lang);
-
-  try {
-    if (password !== confirmation_password) {
-      return {
-        statusCode: 400,
-        response: {
-          message: t('message.forgot_password.passwords_do_not_match'),
-        },
-      };
-    }
-
-    const {
-      User: { id },
-    } = jwt.verify(token, getJwtSecret()) as JwtPayload;
-
-    const user = await userRepository.findById(id);
-
-    if (!user || user.token_to_reset_password !== token) {
-      throw new Error('Invalid token');
-    }
-
-    const newPasswordFormat = await encrypt(password);
-    await userRepository.update(id, {
-      ...{},
-      // password is not part of UpdateUserData, so we update directly via prisma
-    });
-
-    await userRepository.updateResetPasswordToken(id, '');
-
-    // Actualizar password directamente usando prisma para no exponerlo en DTOs
-    await (await import('../../prisma/client')).default.user.update({
-      where: { id },
-      data: { password: newPasswordFormat },
-    });
-
-    return {
-      statusCode: 200,
-      response: {
-        message: t('message.forgot_password.success_update_password'),
-      },
-    };
-  } catch (err) {
-    console.log(err);
-    return {
-      statusCode: 400,
-      response: {
-        message: t('message.forgot_password.expired_token'),
-      },
-    };
-  }
-};
-
-export default { login, createUser, forgotPassword, newPassword };
-
-
+export default { login, createUser };

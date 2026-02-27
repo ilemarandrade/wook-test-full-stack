@@ -51,21 +51,3 @@ export const signupValidator = [
     .withMessage('Phone must be between 7 and 15 digits long'),
 ];
 
-export const forgotPasswordValidator = [
-  body('email')
-    .trim()
-    .isEmail()
-    .withMessage('Email is invalid')
-    .normalizeEmail(),
-];
-
-export const newPasswordValidator = [
-  body('password')
-    .isLength({ min: 8 })
-    .withMessage('Password must be at least 8 characters'),
-  body('confirmation_password')
-    .isLength({ min: 8 })
-    .withMessage('Confirmation password must be at least 8 characters'),
-  body('token').notEmpty().withMessage('Token is required'),
-];
-

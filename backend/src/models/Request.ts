@@ -19,8 +19,9 @@ interface Header {
   lang?: Lang;
 }
 
-export interface IRequest extends Request {
+export interface IRequest<TDto = unknown> extends Request {
   token?: string;
   user?: any;
+  dto?: TDto;
   headers: Request['headers'] & Header;
 }
