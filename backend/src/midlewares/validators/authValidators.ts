@@ -30,15 +30,14 @@ export const signupValidator = [
     .withMessage('Phone must be between 7 and 15 digits long'),
 ];
 
-export const updateUserValidator = [
+export const updateMeValidator = [
   body('user').notEmpty().withMessage('User data is required'),
-  body('user.id').notEmpty().withMessage('User id is required'),
   body('user').custom((user) => {
     if (typeof user !== 'object' || user === null) {
       throw new Error('User data must be an object');
     }
 
-    const allowedKeys = ['id', 'name', 'lastname', 'document', 'phone', 'lang'];
+    const allowedKeys = ['name', 'lastname', 'document', 'phone', 'lang'];
     const invalidKeys = Object.keys(user).filter((key) => !allowedKeys.includes(key));
 
     if (invalidKeys.length > 0) {

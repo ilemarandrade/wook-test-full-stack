@@ -5,8 +5,7 @@ const apiUrl =
   (import.meta as { env?: { VITE_API_URL?: string } }).env?.VITE_API_URL ||
   'http://localhost:4000';
 
-// All auth endpoints are under /api/v1/auth
-const baseURL = `${apiUrl}/api/v1/auth`;
+const baseURL = `${apiUrl}/api/v1`;
 
 export const DEFAULT_ERROR_MESSAGE = 'Unexpected error';
 

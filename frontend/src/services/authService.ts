@@ -22,7 +22,7 @@ export interface UpdateProfileResponse {
 
 export const authService = {
   login: async (values: LoginFormValues): Promise<LoginResponse> => {
-    const data = (await apiClient.post<LoginResponse>('/login', {
+    const data = (await apiClient.post<LoginResponse>('/auth/login', {
       user: { email: values.email, password: values.password },
     }));
 
@@ -31,7 +31,7 @@ export const authService = {
 
   register: async (values: RegisterFormValues): Promise<RegisterResponse> => {
     const data = (await apiClient.post<RegisterResponse>(
-      '/signup',
+      '/auth/register',
       {
         user: {
           name: values.name,
@@ -49,7 +49,7 @@ export const authService = {
 
   updateProfile: async (values: Partial<User>): Promise<UpdateProfileResponse> => {
     const data = (await apiClient.put<UpdateProfileResponse>(
-      '/update_user',
+      '/users/me',
       {
         user: {
           id: values.id,
@@ -66,7 +66,7 @@ export const authService = {
   },
 
   getCurrentUser: async (): Promise<User> => {
-    const data = await apiClient.get<UserInformationResponse>('/user_information');
+    const data = await apiClient.get<UserInformationResponse>('/users/me');
     return data.user;
   },
 };

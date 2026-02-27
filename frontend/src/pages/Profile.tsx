@@ -43,7 +43,6 @@ const Profile: React.FC = () => {
     updateProfileMutation.mutate(
       {
         ...values,
-        id: profileUser.id,
       },
       {
         onSuccess: (_data, values) => {
