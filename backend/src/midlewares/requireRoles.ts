@@ -9,7 +9,6 @@ export const requireRoles = (roles: string[]) => {
 
     const userRole = req.user?.user?.role;
 
-    console.log('userRole', userRole);
     if (!userRole || !roles.includes(userRole)) {
       return res.status(403).json({
         statusCode: 403,

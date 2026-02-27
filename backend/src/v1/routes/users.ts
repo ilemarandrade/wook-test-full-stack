@@ -1,10 +1,9 @@
 import express from 'express';
 import * as userController from '../../modules/users/users.controller';
 import verifyUserToken from '../../midlewares/verifyUserToken';
-import { updateMeValidator } from '../../midlewares/validators/authValidators';
 import validateRequest from '../../midlewares/validators/validateRequest';
 import { requireRoles } from '../../midlewares/requireRoles';
-import { listUsersValidator } from '../../midlewares/validators/usersValidators';
+import { listUsersValidator, updateMeValidator } from '../../midlewares/validators/usersValidators';
 
 const router = express.Router();
 
