@@ -4,6 +4,9 @@ node_modules/
 # Build
 dist/
 build/
+
+# Test coverage
+coverage/
 *.tsbuildinfo
 
 # Secrets and env (never commit)
