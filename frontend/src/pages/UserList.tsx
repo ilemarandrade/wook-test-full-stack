@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { getApiErrorMessage } from '../config/axiosInstance';
 import { useUserTableState } from '../hooks/users/useUserTableState';
 import { useUserFilters, type UserFilterValues } from '../hooks/users/useUserFilters';
@@ -28,6 +29,7 @@ const UserList: React.FC = () => {
   });
 
   const errorMessage = error ? getApiErrorMessage(error) : undefined;
+  const { t } = useTranslation();
 
   const handleSearch = (values: UserFilterValues) => {
     setPage(1);
@@ -43,7 +45,9 @@ const UserList: React.FC = () => {
     <div className="min-h-screen bg-slate-950/90 px-4 py-8">
       <div className="mx-auto w-full max-w-6xl">
         <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <h1 className="text-2xl font-semibold text-slate-50">Users</h1>
+          <h1 className="text-2xl font-semibold text-slate-50">
+            {t('users.title')}
+          </h1>
         
         </div>
 

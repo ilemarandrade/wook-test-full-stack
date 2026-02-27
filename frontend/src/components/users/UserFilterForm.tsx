@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import type { UserFilterValues } from '../../hooks/users/useUserFilters';
 import { INITIAL_FILTERS } from '../../hooks/users/useUserFilters';
 import { TextFieldControlled } from '../form/TextFieldControlled';
@@ -21,6 +22,7 @@ export const UserFilterForm: React.FC<UserFilterFormProps> = ({
   const { control, handleSubmit, reset } = useForm<UserFilterValues>({
     defaultValues: initialValues,
   });
+  const { t } = useTranslation();
 
   useEffect(() => {
     reset(initialValues);
@@ -46,35 +48,35 @@ export const UserFilterForm: React.FC<UserFilterFormProps> = ({
         <TextFieldControlled
           name="name"
           control={control}
-          label="Name"
-          placeholder="Name"
+          label={t('users.filters.name')}
+          placeholder={t('users.filters.placeholderName')}
           maxLength={25}
           inputFilterType="letters"
         />
         <TextFieldControlled
           name="document"
           control={control}
-          label="Document"
-          placeholder="Document"
+          label={t('users.filters.document')}
+          placeholder={t('users.filters.placeholderDocument')}
           maxLength={20}
           inputFilterType="numbers"
         />
         <TextFieldControlled
           name="phone"
           control={control}
-          label="Phone"
-          placeholder="Phone"
+          label={t('users.filters.phone')}
+          placeholder={t('users.filters.placeholderPhone')}
           maxLength={20}
           inputFilterType="numbers"
         />
         <div className="grid grid-cols-2 items-end gap-2">
           {onReset && (
             <Button type="button" variant="outline" onClick={handleClear}>
-              Clear
+                {t('users.filters.clear')}
             </Button>
           )}
           <Button type="submit" disabled={isSearching}>
-            {isSearching ? 'Searching...' : 'Search'}
+              {isSearching ? t('users.filters.searching') : t('users.filters.search')}
           </Button>
         </div>
       </div>

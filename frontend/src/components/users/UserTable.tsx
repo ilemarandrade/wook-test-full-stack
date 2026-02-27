@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import type { User } from '../../context/AuthContext';
 import type { PageSizeOption } from '../../hooks/users/useUserTableState';
 import { Button } from '../ui/Button';
@@ -30,6 +31,7 @@ export const UserTable: React.FC<UserTableProps> = ({
   nextPage,
   prevPage,
 }) => {
+  const { t } = useTranslation();
   const totalPages = total > 0 ? Math.ceil(total / pageSize) : 1;
 
   const handlePrevious = () => {
@@ -46,12 +48,12 @@ export const UserTable: React.FC<UserTableProps> = ({
         <table className="min-w-full divide-y divide-slate-800 text-sm">
           <thead className="bg-slate-900/80">
             <tr>
-              <th className="px-4 py-3 text-left font-medium text-slate-300">Name</th>
-              <th className="px-4 py-3 text-left font-medium text-slate-300">Lastname</th>
-              <th className="px-4 py-3 text-left font-medium text-slate-300">Email</th>
-              <th className="px-4 py-3 text-left font-medium text-slate-300">Document</th>
-              <th className="px-4 py-3 text-left font-medium text-slate-300">Phone</th>
-              <th className="px-4 py-3 text-left font-medium text-slate-300">Role</th>
+              <th className="px-4 py-3 text-left font-medium text-slate-300">{t('users.table.name')}</th>
+              <th className="px-4 py-3 text-left font-medium text-slate-300">{t('users.table.lastname')}</th>
+              <th className="px-4 py-3 text-left font-medium text-slate-300">{t('users.table.email')}</th>
+              <th className="px-4 py-3 text-left font-medium text-slate-300">{t('users.table.document')}</th>
+              <th className="px-4 py-3 text-left font-medium text-slate-300">{t('users.table.phone')}</th>
+              <th className="px-4 py-3 text-left font-medium text-slate-300">{t('users.table.role')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-800 bg-slate-950/40">
@@ -61,7 +63,7 @@ export const UserTable: React.FC<UserTableProps> = ({
                   colSpan={6}
                   className="px-4 py-6 text-center text-sm text-slate-400"
                 >
-                  Loading users...
+                  {t('users.table.loading')}
                 </td>
               </tr>
             ) : errorMessage ? (
@@ -79,7 +81,7 @@ export const UserTable: React.FC<UserTableProps> = ({
                   colSpan={6}
                   className="px-4 py-6 text-center text-sm text-slate-400"
                 >
-                  No users found.
+                  {t('users.table.noUsers')}
                 </td>
               </tr>
             ) : (
@@ -111,7 +113,7 @@ export const UserTable: React.FC<UserTableProps> = ({
       </div>
       <div className="flex flex-col items-center justify-between gap-3 border-t border-slate-800 bg-slate-900/80 px-4 py-3 text-xs text-slate-300 md:flex-row">
         <div className="flex items-center gap-2">
-          <span>Rows per page:</span>
+          <span>{t('users.table.rowsPerPage')}</span>
           <select
             value={pageSize}
             onChange={(e) => onPageSizeChange(Number(e.target.value) as PageSizeOption)}
@@ -131,14 +133,14 @@ export const UserTable: React.FC<UserTableProps> = ({
             disabled={!prevPage}
             variant="pagination"
           >
-            Previous
+            {t('users.table.previous')}
           </Button>
           <span>
-            Page{' '}
+            {t('users.table.page')}{' '}
             <span className="font-semibold">
               {total === 0 ? 0 : page}
             </span>{' '}
-            of{' '}
+            {t('users.table.of')}{' '}
             <span className="font-semibold">
               {total === 0 ? 0 : totalPages}
             </span>
@@ -149,11 +151,11 @@ export const UserTable: React.FC<UserTableProps> = ({
             disabled={!nextPage}
             variant="pagination"
           >
-            Next
+            {t('users.table.next')}
           </Button>
         </div>
         <div className="text-xs text-slate-400">
-          Total users: <span className="font-semibold text-slate-200">{total}</span>
+          {t('users.table.totalUsers')} <span className="font-semibold text-slate-200">{total}</span>
         </div>
       </div>
     </div>

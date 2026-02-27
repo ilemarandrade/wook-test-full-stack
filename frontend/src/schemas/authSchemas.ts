@@ -57,7 +57,6 @@ export interface ProfileFormValues {
   lastname?: string;
   document: string;
   phone?: string;
-  lang: string;
 }
 
 export const profileSchema = Joi.object<ProfileFormValues>({
@@ -75,6 +74,5 @@ export const profileSchema = Joi.object<ProfileFormValues>({
     .max(15)
     .required()
     .label('Phone'),
-  lang: Joi.string().valid('en', 'es').required().label('Language'),
 });
 
