@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
@@ -9,22 +10,19 @@ import { getApiErrorMessage } from "../config/axiosInstance";
 
 const Profile: React.FC = () => {
   const { token, logout, login } = useAuth();
-  const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const { data: user, isLoading: isLoadingUser } = useUserInformation(!!token);
+  const { data: user, isLoading: isLoadingUser, refetch: refetchUser } = useUserInformation(!!token);
   const updateProfileMutation = useUpdateProfileMutation();
   const {
     control,
     register,
     handleSubmit,
     reset,
-    formState: { isSubmitting },
+    formState: { isSubmitting, isDirty },
   } = useForm<ProfileFormValues>({
     resolver: joiResolver(profileSchema),
   });
-
-  const syncedUserIdRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (!user || !token) return;
@@ -35,17 +33,12 @@ const Profile: React.FC = () => {
       phone: user.phone,
       lang: user.lang ?? "en",
     });
-    if (syncedUserIdRef.current !== user.id) {
-      syncedUserIdRef.current = user.id;
-      login(token, user);
-    }
   }, [user, token, reset, login]);
 
   const profileUser = user;
 
   const onSubmit = (values: ProfileFormValues) => {
     setError(null);
-    setMessage(null);
     if (!token || !profileUser) return;
     updateProfileMutation.mutate(
       {
@@ -53,16 +46,9 @@ const Profile: React.FC = () => {
         id: profileUser.id,
       },
       {
-        onSuccess: (data) => {
-          setMessage(data.message ?? "Profile updated");
-          login(token, {
-            ...profileUser,
-            name: values.name,
-            lastname: values.lastname ?? profileUser.lastname,
-            document: values.document,
-            phone: values.phone ?? profileUser.phone,
-            lang: values.lang,
-          });
+        onSuccess: (_data, values) => {
+          toast.success("Perfil actualizado correctamente");
+          refetchUser();
         },
         onError: (err) => {
           setError(getApiErrorMessage(err));
@@ -91,11 +77,6 @@ const Profile: React.FC = () => {
             Logout
           </button>
         </div>
-        {message && (
-          <div className="mb-4 text-sm text-emerald-300 bg-emerald-900/30 border border-emerald-700 rounded px-3 py-2">
-            {message}
-          </div>
-        )}
         {error && (
           <div className="mb-4 text-sm text-red-400 bg-red-900/30 border border-red-700 rounded px-3 py-2">
             {error}
@@ -133,7 +114,7 @@ const Profile: React.FC = () => {
           </div>
           <button
             type="submit"
-            disabled={isSubmitting || updateProfileMutation.isPending}
+            disabled={isSubmitting || updateProfileMutation.isPending || !isDirty}
             className="w-full mt-2 inline-flex justify-center rounded-md bg-sky-600 px-4 py-2 text-sm font-medium text-white hover:bg-sky-500 disabled:bg-slate-600"
           >
             {isSubmitting || updateProfileMutation.isPending
