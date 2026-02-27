@@ -6,6 +6,7 @@ import { joiResolver } from '@hookform/resolvers/joi';
 import { LoginFormValues, loginSchema } from '../schemas/authSchemas';
 import { TextFieldControlled } from '../components/form/TextFieldControlled';
 import { PasswordFieldControlled } from '../components/form/PasswordFieldControlled';
+import { Button } from '../components/ui/Button';
 import { useLoginMutation } from '../hooks/api';
 import { getApiErrorMessage } from '../config/axiosInstance';
 
@@ -57,13 +58,14 @@ const Login: React.FC = () => {
             control={control}
             label="Password"
           />
-          <button
+          <Button
             type="submit"
             disabled={isSubmitting || loginMutation.isPending}
-            className="w-full mt-2 inline-flex justify-center rounded-md bg-sky-600 px-4 py-2 text-sm font-medium text-white hover:bg-sky-500 disabled:bg-slate-600"
+            fullWidth
+            className="mt-2"
           >
             {isSubmitting || loginMutation.isPending ? 'Signing in...' : 'Sign in'}
-          </button>
+          </Button>
         </form>
         <p className="mt-4 text-sm text-center text-slate-400">
           Don&apos;t have an account?{' '}

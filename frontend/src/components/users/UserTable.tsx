@@ -1,6 +1,7 @@
 import React from 'react';
 import type { User } from '../../context/AuthContext';
 import type { PageSizeOption } from '../../hooks/users/useUserTableState';
+import { Button } from '../ui/Button';
 
 interface UserTableProps {
   users: User[];
@@ -124,14 +125,14 @@ export const UserTable: React.FC<UserTableProps> = ({
           </select>
         </div>
         <div className="flex items-center gap-3">
-          <button
+          <Button
             type="button"
             onClick={handlePrevious}
             disabled={!prevPage}
-            className="rounded-md border border-slate-700 px-2 py-1 text-xs disabled:opacity-50"
+            variant="pagination"
           >
             Previous
-          </button>
+          </Button>
           <span>
             Page{' '}
             <span className="font-semibold">
@@ -142,14 +143,14 @@ export const UserTable: React.FC<UserTableProps> = ({
               {total === 0 ? 0 : totalPages}
             </span>
           </span>
-          <button
+          <Button
             type="button"
             onClick={handleNext}
             disabled={!nextPage}
-            className="rounded-md border border-slate-700 px-2 py-1 text-xs disabled:opacity-50"
+            variant="pagination"
           >
             Next
-          </button>
+          </Button>
         </div>
         <div className="text-xs text-slate-400">
           Total users: <span className="font-semibold text-slate-200">{total}</span>

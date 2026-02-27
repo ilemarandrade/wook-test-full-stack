@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { ProfileFormValues, profileSchema } from "../schemas/authSchemas";
 import { TextFieldControlled } from "../components/form/TextFieldControlled";
+import { Button } from "../components/ui/Button";
 import { useUpdateProfileMutation, useUserInformation } from "../hooks/api";
 import { getApiErrorMessage } from "../config/axiosInstance";
 
@@ -121,17 +122,18 @@ const Profile: React.FC = () => {
               <option value="es">Español</option>
             </select>
           </div>
-          <button
+          <Button
             type="submit"
             disabled={
               isSubmitting || updateProfileMutation.isPending || !isDirty
             }
-            className="w-full mt-2 inline-flex justify-center rounded-md bg-sky-600 px-4 py-2 text-sm font-medium text-white hover:bg-sky-500 disabled:bg-slate-600"
+            fullWidth
+            className="mt-2"
           >
             {isSubmitting || updateProfileMutation.isPending
               ? "Saving..."
               : "Save changes"}
-          </button>
+          </Button>
         </form>
       </div>
     </div>

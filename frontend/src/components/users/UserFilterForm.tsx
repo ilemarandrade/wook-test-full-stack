@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import type { UserFilterValues } from '../../hooks/users/useUserFilters';
 import { INITIAL_FILTERS } from '../../hooks/users/useUserFilters';
 import { TextFieldControlled } from '../form/TextFieldControlled';
+import { Button } from '../ui/Button';
 
 interface UserFilterFormProps {
   initialValues: UserFilterValues;
@@ -66,27 +67,17 @@ export const UserFilterForm: React.FC<UserFilterFormProps> = ({
           maxLength={20}
           inputFilterType="numbers"
         />
-           <div className="grid grid-cols-2 items-end gap-2">
-       
-        {onReset && (
-          <button
-            type="button"
-            onClick={handleClear}
-            className="inline-flex items-center rounded-md border border-slate-600 px-3 py-2 text-sm font-medium text-slate-200 hover:bg-slate-800"
-          >
-            Clear
-          </button>
-        )}
-         <button
-          type="submit"
-          disabled={isSearching}
-          className="inline-flex items-center rounded-md bg-sky-600 px-4 py-2 text-sm font-medium text-white hover:bg-sky-500 disabled:bg-slate-600"
-        >
-          {isSearching ? 'Searching...' : 'Search'}
-        </button>
+        <div className="grid grid-cols-2 items-end gap-2">
+          {onReset && (
+            <Button type="button" variant="outline" onClick={handleClear}>
+              Clear
+            </Button>
+          )}
+          <Button type="submit" disabled={isSearching}>
+            {isSearching ? 'Searching...' : 'Search'}
+          </Button>
+        </div>
       </div>
-      </div>
-   
     </form>
   );
 };
