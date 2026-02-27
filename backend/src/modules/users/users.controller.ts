@@ -47,8 +47,18 @@ export const updateMe = async (req: IRequest, res: Response) => {
   res.status(statusCode).send(response);
 };
 
-export const listUsers = async (_req: IRequest, res: Response) => {
-  const { statusCode, response } = await listUsersService();
+export const listUsers = async (req: IRequest, res: Response) => {
+  const rawPage = req.query.page as string | undefined;
+  const rawPageSize = req.query.pageSize as string | undefined;
+
+  const page = rawPage ? Number(rawPage) : 1;
+  const pageSize = rawPageSize ? Number(rawPageSize) : 10;
+
+  const { statusCode, response } = await listUsersService({
+    page,
+    pageSize,
+  });
+
   res.status(statusCode).send(response);
 };
 
