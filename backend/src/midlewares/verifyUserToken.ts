@@ -13,28 +13,36 @@ const verifyUserToken = async (
   const { t } = handleTraductions(lang);
 
   try {
-    if (req.headers.authorization) {
-      const token = req.headers.authorization.split(' ')[1];
+    const authHeader = req.headers.authorization;
 
-      if (!token) {
-        throw new Error('Authentication failed!');
-      }
+    if (!authHeader) {
+      return res
+        .status(401)
+        .send({ message: t('message.authorization_incorrect') });
+    }
 
-      const verified = jwt.verify(token, getJwtSecret());
+    const token = authHeader.split(' ')[1];
 
-      if (verified) {
-        req.user = verified;
-        req.token = token;
-        next();
-      } else {
-        res
-          .status(401)
-          .send({ message: t('message.authorization_incorrect') });
-      }
+    if (!token) {
+      throw new Error('Authentication failed!');
+    }
+
+    const verified = jwt.verify(token, getJwtSecret());
+
+    if (verified) {
+      req.user = verified;
+      req.token = token;
+      return next();
+    } else {
+      return res
+        .status(401)
+        .send({ message: t('message.authorization_incorrect') });
     }
   } catch (err) {
     console.log(err);
-    res.status(400).send({ message: t('message.error_unexpected') });
+    return res
+      .status(401)
+      .send({ message: t('message.authorization_incorrect') });
   }
 };
 
