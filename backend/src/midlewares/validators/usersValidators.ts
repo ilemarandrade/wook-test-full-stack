@@ -26,9 +26,8 @@ export const listUsersValidator = [
     .isString()
     .withMessage('document must be a string')
     .matches(/^\d+$/)
-    .withMessage('document must contain only numbers')
-    .isLength({ min: 7, max: 15 })
-    .withMessage('document must be between 7 and 15 digits long'),
+    .withMessage('document must contain only numbers'),
+
 
   query('phone')
     .optional()
@@ -36,8 +35,7 @@ export const listUsersValidator = [
     .withMessage('phone must be a string')
     .matches(/^\d+$/)
     .withMessage('phone must contain only numbers')
-    .isLength({ min: 7, max: 15 })
-    .withMessage('phone must be between 7 and 15 digits long'),
+
 ];
 
 export const updateMeValidator = [
