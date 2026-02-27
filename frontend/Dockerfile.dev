@@ -2,17 +2,14 @@ FROM node:20-alpine
 
 WORKDIR /usr/src/app
 
-RUN apk add --no-cache bash
-
-# Copiar package.json y package-lock.json primero para cache
+# Instalar dependencias para el frontend en modo dev (Vite)
 COPY package*.json ./
+RUN npm ci
 
-RUN npm install
-
-# Copiar el resto del código del frontend
-COPY . .
+# El código fuente se monta como volumen desde el host
 
 EXPOSE 5173
 
+# En docker-compose.yml ya se sobreescribe el comando con npm run dev -- --host ...
 CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "5173"]
 

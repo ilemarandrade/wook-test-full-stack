@@ -1,21 +1,23 @@
-# Un solo .env por proyecto: backend/.env y frontend/.env. Sin .env en la raíz.
+# Entorno de desarrollo: un solo .env.docker en la raíz para Docker.
 # db y backend leen backend/.env (mismo archivo).
 
 version: "3.9"
 
 services:
   db:
-    image: postgres:15
+    image: postgres:17
     container_name: woow_db
     restart: unless-stopped
     env_file:
-      - ./backend/.env
+      - ./.env.docker
     ports:
       - "5432:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"]
+      # Usamos $$ para que Docker Compose no expanda las vars en el host
+      # y sea el shell dentro del contenedor quien use POSTGRES_USER/POSTGRES_DB.
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -30,7 +32,7 @@ services:
       db:
         condition: service_healthy
     env_file:
-      - ./backend/.env
+      - ./.env.docker
     environment:
       NODE_ENV: development
     volumes:
@@ -54,7 +56,7 @@ services:
     depends_on:
       - backend
     env_file:
-      - ./frontend/.env
+      - ./.env.docker
     environment:
       VITE_DOCKER: "1"
     volumes:

@@ -2,21 +2,19 @@ FROM node:20-alpine
 
 WORKDIR /usr/src/app
 
-# Dependencias del sistema mínimas para Prisma y Postgres
-RUN apk add --no-cache openssl bash curl netcat-openbsd
+# Herramientas necesarias para Prisma y el wait de Postgres
+RUN apk add --no-cache openssl netcat-openbsd
 
-# Copiar package.json, package-lock.json y prisma para que postinstall (prisma generate) encuentre el schema
+# Instalar dependencias (incluye prisma CLI en node_modules)
 COPY package*.json ./
 COPY prisma ./prisma/
+RUN npm ci
+RUN npx prisma generate
 
-RUN npm install
+# El código fuente se monta como volumen desde el host
 
-# Copiar el resto del código del backend
-COPY . .
-
-# Puerto expuesto por el backend (configurado también vía PORT en docker-compose)
 EXPOSE 4000
 
-# El comando real se define en docker-compose.yml (service backend -> command)
+# En docker-compose.yml ya se sobreescribe el comando con npm run dev
 CMD ["npm", "run", "dev"]
 
