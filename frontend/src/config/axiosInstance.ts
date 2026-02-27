@@ -68,7 +68,10 @@ apiClient.interceptors.response.use(
       localStorage.removeItem(AUTH_STORAGE_KEY);
       if (window.location.pathname !== '/login') {
         toast.error('Se venció la sesión. Inicia sesión nuevamente.');
-        window.location.replace('/login');
+
+        setTimeout(() => {
+          window.location.replace('/login');
+        }, 1000);
       } else {
         toast.error('Se venció la sesión. Inicia sesión nuevamente.');
       }
