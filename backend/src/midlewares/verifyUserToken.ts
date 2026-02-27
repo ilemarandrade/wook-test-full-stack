@@ -3,13 +3,14 @@ import { getJwtSecret } from '../utils/jwtHelper';
 import handleTraductions from '../utils/handleTraductions';
 import { IRequest } from '../models/Request';
 import { NextFunction, Response } from 'express';
+import { getRequestLang } from '../utils/getRequestLang';
 
 const verifyUserToken = async (
   req: IRequest,
   res: Response,
   next: NextFunction
 ) => {
-  const { lang } = req.headers;
+  const lang = getRequestLang(req);
   const { t } = handleTraductions(lang);
 
   try {

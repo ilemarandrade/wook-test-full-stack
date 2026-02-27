@@ -3,9 +3,10 @@ import { Response } from 'express';
 import { IRequest } from '../../models/Request';
 import type { LoginDto } from './dtos/LoginDto';
 import type { SignupUserDto } from './dtos/SignupUserDto';
+import { getRequestLang } from '../../utils/getRequestLang';
 
 const login = async (req: IRequest<LoginDto>, res: Response) => {
-  const { lang = 'en' } = req.headers;
+  const lang = getRequestLang(req);
   const dto = req.dto as LoginDto;
 
   const { statusCode, response } = await authServices.login({
@@ -17,7 +18,7 @@ const login = async (req: IRequest<LoginDto>, res: Response) => {
 };
 
 const createNewUser = async (req: IRequest<SignupUserDto>, res: Response) => {
-  const { lang = 'en' } = req.headers;
+  const lang = getRequestLang(req);
   const dto = req.dto as SignupUserDto;
 
   const { statusCode, response } = await authServices.createUser({

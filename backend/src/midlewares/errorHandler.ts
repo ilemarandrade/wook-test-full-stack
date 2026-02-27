@@ -1,6 +1,7 @@
 import { NextFunction, Response } from 'express';
 import handleTraductions from '../utils/handleTraductions';
 import { IRequest } from '../models/Request';
+import { getRequestLang } from '../utils/getRequestLang';
 
 export const errorHandler = (
   err: unknown,
@@ -14,7 +15,7 @@ export const errorHandler = (
     return next(err);
   }
 
-  const { lang = 'en' } = req.headers;
+  const lang = getRequestLang(req);
   const { t } = handleTraductions(lang);
 
   return res.status(500).json({

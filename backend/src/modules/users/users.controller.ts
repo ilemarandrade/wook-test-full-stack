@@ -6,9 +6,10 @@ import { updateMe as updateMeService, listUsers as listUsersService } from './us
 import { toUserDTO } from './dtos/UserDTO';
 import type { UpdateMeDto } from './dtos/UpdateMeDto';
 import type { ListUsersQueryDto } from './dtos/ListUsersQueryDto';
+import { getRequestLang } from '../../utils/getRequestLang';
 
 export const getMe = async (req: IRequest, res: Response) => {
-  const { lang = 'en' } = req.headers;
+  const lang = getRequestLang(req);
   const { t } = handleTraductions(lang);
 
   try {
@@ -29,7 +30,7 @@ export const getMe = async (req: IRequest, res: Response) => {
 };
 
 export const updateMe = async (req: IRequest<UpdateMeDto>, res: Response) => {
-  const { lang = 'en' } = req.headers;
+  const lang = getRequestLang(req);
   const currentUser = { user: req.user.user }; // from middleware JWT payload
   const dto = req.dto as UpdateMeDto;
   const dataToUpdateUser = dto.user;
