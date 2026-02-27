@@ -1,0 +1,82 @@
+{
+  "layout": {
+    "title": "Woow Test",
+    "users": "Usuarios",
+    "profile": "Perfil",
+    "logout": "Cerrar sesión"
+  },
+  "login": {
+    "title": "Iniciar sesión",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "submit": "Ingresar",
+    "submitting": "Ingresando...",
+    "noAccount": "¿No tienes una cuenta?",
+    "goRegister": "Registrarse"
+  },
+  "register": {
+    "title": "Registrarse",
+    "name": "Nombre",
+    "lastname": "Apellido",
+    "email": "Correo electrónico",
+    "document": "Documento",
+    "phone": "Teléfono",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "submit": "Registrarse",
+    "submitting": "Registrando...",
+    "haveAccount": "¿Ya tienes una cuenta?",
+    "goLogin": "Iniciar sesión",
+    "success": "Usuario registrado correctamente"
+  },
+  "profile": {
+    "title": "Perfil",
+    "name": "Nombre",
+    "lastname": "Apellido",
+    "document": "Documento",
+    "phone": "Teléfono",
+    "language": "Idioma",
+    "saving": "Guardando...",
+    "save": "Guardar cambios",
+    "loading": "Cargando perfil...",
+    "updated": "Perfil actualizado correctamente"
+  },
+  "users": {
+    "title": "Usuarios",
+    "filters": {
+      "name": "Nombre",
+      "document": "Documento",
+      "phone": "Teléfono",
+      "placeholderName": "Nombre",
+      "placeholderDocument": "Documento",
+      "placeholderPhone": "Teléfono",
+      "clear": "Limpiar",
+      "search": "Buscar",
+      "searching": "Buscando..."
+    },
+    "table": {
+      "name": "Nombre",
+      "lastname": "Apellido",
+      "email": "Correo electrónico",
+      "document": "Documento",
+      "phone": "Teléfono",
+      "role": "Rol",
+      "loading": "Cargando usuarios...",
+      "noUsers": "No se encontraron usuarios.",
+      "rowsPerPage": "Filas por página:",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "page": "Página",
+      "of": "de",
+      "totalUsers": "Total usuarios:"
+    }
+  },
+  "session": {
+    "expired": "Se venció la sesión. Inicia sesión nuevamente."
+  },
+  "language": {
+    "es": "Español",
+    "en": "Inglés"
+  }
+}
+

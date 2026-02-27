@@ -1,0 +1,82 @@
+{
+  "layout": {
+    "title": "Woow Test",
+    "users": "Users",
+    "profile": "Profile",
+    "logout": "Logout"
+  },
+  "login": {
+    "title": "Login",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign in",
+    "submitting": "Signing in...",
+    "noAccount": "Don't have an account?",
+    "goRegister": "Register"
+  },
+  "register": {
+    "title": "Register",
+    "name": "Name",
+    "lastname": "Lastname",
+    "email": "Email",
+    "document": "Document",
+    "phone": "Phone",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "submit": "Register",
+    "submitting": "Registering...",
+    "haveAccount": "Already have an account?",
+    "goLogin": "Login",
+    "success": "User registered successfully"
+  },
+  "profile": {
+    "title": "Profile",
+    "name": "Name",
+    "lastname": "Lastname",
+    "document": "Document",
+    "phone": "Phone",
+    "language": "Language",
+    "saving": "Saving...",
+    "save": "Save changes",
+    "loading": "Loading profile...",
+    "updated": "Profile updated successfully"
+  },
+  "users": {
+    "title": "Users",
+    "filters": {
+      "name": "Name",
+      "document": "Document",
+      "phone": "Phone",
+      "placeholderName": "Name",
+      "placeholderDocument": "Document",
+      "placeholderPhone": "Phone",
+      "clear": "Clear",
+      "search": "Search",
+      "searching": "Searching..."
+    },
+    "table": {
+      "name": "Name",
+      "lastname": "Lastname",
+      "email": "Email",
+      "document": "Document",
+      "phone": "Phone",
+      "role": "Role",
+      "loading": "Loading users...",
+      "noUsers": "No users found.",
+      "rowsPerPage": "Rows per page:",
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page",
+      "of": "of",
+      "totalUsers": "Total users:"
+    }
+  },
+  "session": {
+    "expired": "Session expired. Please log in again."
+  },
+  "language": {
+    "es": "Spanish",
+    "en": "English"
+  }
+}
+
