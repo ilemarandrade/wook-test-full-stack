@@ -71,8 +71,6 @@ apiClient.interceptors.response.use(
         setTimeout(() => {
           window.location.replace('/login');
         }, 1000);
-      } else {
-        toast.error('Se venció la sesión. Inicia sesión nuevamente.');
       }
     }
 

@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import { validateEnv } from './config/envSchema';
 import V1Router from './v1/routes';
 import { runInitialUsersSeed } from './modules/users/initialUsersSeed';
+import { errorHandler } from './midlewares/errorHandler';
 
 async function bootstrap(): Promise<void> {
   dotenv.config();
@@ -27,6 +28,7 @@ async function bootstrap(): Promise<void> {
 
   // *** call to version 1 routes ***
   app.use('/api/v1', V1Router);
+  app.use(errorHandler);
 
   await runInitialUsersSeed();
 

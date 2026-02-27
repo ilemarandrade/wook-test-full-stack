@@ -29,7 +29,7 @@ const login = async ({
 
     if (!foundUser) {
       return {
-        statusCode: 400,
+        statusCode: 401,
         response: { message: t('message.login.wrong_data') },
       };
     }
@@ -38,7 +38,7 @@ const login = async ({
 
     if (!isCorrectPassword) {
       return {
-        statusCode: 400,
+        statusCode: 401,
         response: { message: t('message.login.wrong_data') },
       };
     }
@@ -71,7 +71,7 @@ const login = async ({
   } catch (error) {
     console.log(error);
     return {
-      statusCode: 400,
+      statusCode: 500,
       response: { message: t('message.error_unexpected') },
     };
   }
@@ -135,7 +135,7 @@ const createUser = async ({
   } catch (error) {
     console.log(error);
     return {
-      statusCode: 400,
+      statusCode: 500,
       response: { message: t('message.error_unexpected') },
     };
   }

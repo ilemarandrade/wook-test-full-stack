@@ -55,7 +55,7 @@ export const updateMe = async ({
   } catch (error) {
     console.log(error);
     return {
-      statusCode: 400,
+      statusCode: 500,
       response: { message: t('message.error_unexpected') },
     };
   }
@@ -149,7 +149,7 @@ export const listUsers = async ({
   } catch (error) {
     console.log(error);
     return {
-      statusCode: 400,
+      statusCode: 500,
       response: {
         users: [],
         itemsTotal: 0,
