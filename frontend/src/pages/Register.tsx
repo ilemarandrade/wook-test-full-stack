@@ -7,6 +7,7 @@ import { TextFieldControlled } from '../components/form/TextFieldControlled';
 import { PasswordFieldControlled } from '../components/form/PasswordFieldControlled';
 import { useRegisterMutation } from '../hooks/api';
 import { getApiErrorMessage } from '../config/axiosInstance';
+import toast from 'react-hot-toast';
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ const Register: React.FC = () => {
     registerMutation.mutate(values, {
       onSuccess: () => {
         navigate('/login');
+        toast.success('User registered successfully');
       },
       onError: (err) => {
         setError(getApiErrorMessage(err));
