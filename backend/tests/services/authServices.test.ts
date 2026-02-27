@@ -1,9 +1,9 @@
-import authServices from '../../src/services/authServices.js';
+import authService from '../../src/modules/auth/auth.service';
 
 // Forzar un valor de JWT_SECRET en el entorno de test
 process.env.JWT_SECRET = 'test-secret';
 
-jest.mock('../../src/repositories/userRepository.js', () => ({
+jest.mock('../../src/modules/users/users.repository', () => ({
   __esModule: true,
   userRepository: {
     findByEmail: jest.fn(),
@@ -16,37 +16,22 @@ jest.mock('../../src/repositories/userRepository.js', () => ({
   },
 }));
 
-jest.mock('../../src/utils/encryptPassword.js', () => ({
+jest.mock('../../src/utils/encryptPassword', () => ({
   __esModule: true,
   encrypt: jest.fn(),
   compare: jest.fn(),
 }));
 
-jest.mock('../../src/utils/handleTraductions.js', () => ({
+jest.mock('../../src/utils/handleTraductions', () => ({
   __esModule: true,
   default: () => ({
     t: (key: string) => key,
   }),
 }));
 
-jest.mock('../../src/utils/sendEmail.js', () => ({
-  __esModule: true,
-  transporter: {
-    sendMail: jest.fn(),
-  },
-}));
-
-jest.mock('../../src/constants/mails/recoveryPassword.js', () => ({
-  __esModule: true,
-  default: {
-    en: (token: string) => `<html>${token}</html>`,
-    es: (token: string) => `<html>${token}</html>`,
-  },
-}));
-
-describe('authServices.login', () => {
+describe('authService.login', () => {
   const { userRepository } = jest.requireMock(
-    '../../src/repositories/userRepository.js'
+    '../../src/modules/users/users.repository'
   ) as {
     userRepository: {
       findByEmail: jest.Mock;
@@ -54,20 +39,20 @@ describe('authServices.login', () => {
   };
 
   const { compare } = jest.requireMock(
-    '../../src/utils/encryptPassword.js'
+    '../../src/utils/encryptPassword'
   ) as {
     compare: jest.Mock;
   };
 
-  it('should return 400 when user does not exist', async () => {
+  it('should return 401 when user does not exist', async () => {
     userRepository.findByEmail.mockResolvedValue(null);
 
-    const result = await authServices.login({
+    const result = await authService.login({
       user: { email: 'notfound@example.com', password: 'secret' },
       lang: 'en',
     });
 
-    expect(result.statusCode).toBe(400);
+    expect(result.statusCode).toBe(401);
     expect(result.response.message).toBe('message.login.wrong_data');
   });
 
@@ -89,7 +74,7 @@ describe('authServices.login', () => {
 
     compare.mockResolvedValue(true);
 
-    const result = await authServices.login({
+    const result = await authService.login({
       user: { email: 'john@example.com', password: 'secret' },
       lang: 'en',
     });

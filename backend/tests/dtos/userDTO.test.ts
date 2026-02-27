@@ -1,4 +1,4 @@
-import { toUserDTO } from '../../src/dtos/UserDTO.js';
+import { toUserDTO } from '../../src/modules/users/dtos/UserDTO';
 import { User } from '@prisma/client';
 
 describe('UserDTO', () => {

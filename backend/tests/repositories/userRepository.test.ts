@@ -1,4 +1,4 @@
-jest.mock('../../src/prisma/client.js', () => ({
+jest.mock('../../src/prisma/client', () => ({
   __esModule: true,
   default: {
     user: {
@@ -10,8 +10,8 @@ jest.mock('../../src/prisma/client.js', () => ({
   },
 }));
 
-import { userRepository } from '../../src/repositories/userRepository.js';
-import prisma from '../../src/prisma/client.js';
+import { userRepository } from '../../src/modules/users/users.repository';
+import prisma from '../../src/prisma/client';
 
 describe('PrismaUserRepository', () => {
   const mockedPrisma = prisma as unknown as {
