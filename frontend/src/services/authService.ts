@@ -47,11 +47,12 @@ export const authService = {
     return data;
   },
 
-  updateProfile: async (values: ProfileFormValues): Promise<UpdateProfileResponse> => {
+  updateProfile: async (values: Partial<User>): Promise<UpdateProfileResponse> => {
     const data = (await apiClient.put<UpdateProfileResponse>(
       '/update_user',
       {
         user: {
+          id: values.id,
           name: values.name,
           lastname: values.lastname,
           document: values.document,

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useCallback, useContext, useState } from 'react';
 
 export interface User {
   id: string;
@@ -44,19 +44,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const user = auth?.user ?? null;
   const token = auth?.token ?? null;
 
-  const login = (newToken: string, newUser?: User) => {
+  const login = useCallback((newToken: string, newUser?: User) => {
     const nextAuth: StoredAuth = newUser
       ? { token: newToken, user: newUser }
       : { token: newToken };
 
     setAuth(nextAuth);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(nextAuth));
-  };
+  }, []);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     setAuth(null);
     localStorage.removeItem(STORAGE_KEY);
-  };
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, token, login, logout }}>

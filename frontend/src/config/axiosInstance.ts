@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import toast from 'react-hot-toast';
 
 const apiUrl =
   (import.meta as { env?: { VITE_API_URL?: string } }).env?.VITE_API_URL ||
@@ -61,6 +62,18 @@ apiClient.interceptors.request.use((config) => {
 apiClient.interceptors.response.use(
   (response) => response.data,
   (error) => {
+    const status = error?.response?.status as number | undefined;
+    if (status === 401) {
+      // Sesión vencida / token inválido
+      localStorage.removeItem(AUTH_STORAGE_KEY);
+      if (window.location.pathname !== '/login') {
+        toast.error('Se venció la sesión. Inicia sesión nuevamente.');
+        window.location.replace('/login');
+      } else {
+        toast.error('Se venció la sesión. Inicia sesión nuevamente.');
+      }
+    }
+
     const rawData = error.response?.data;
 
     if (rawData && typeof rawData === 'object') {
