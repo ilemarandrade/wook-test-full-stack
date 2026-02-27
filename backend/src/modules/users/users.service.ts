@@ -1,7 +1,7 @@
 import handleTraductions from '../../utils/handleTraductions';
 import { IResponseServices, Lang } from '../../models/Request';
 import { userRepository } from './users.repository';
-import { User } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 
 interface IUpdateMeInput {
   dataToUpdateUser: {
@@ -18,6 +18,9 @@ interface IUpdateMeInput {
 interface IListUsersInput {
   page: number;
   pageSize: number;
+  name?: string;
+  document?: string;
+  phone?: string;
 }
 
 type UserWithoutPassword = Omit<User, 'password'>;
@@ -57,6 +60,9 @@ export const updateMe = async ({
 export const listUsers = async ({
   page,
   pageSize,
+  name,
+  document,
+  phone,
 }: IListUsersInput): Promise<IResponseServices<ListUsersResponse>> => {
   try {
     const safePage = Number.isNaN(page) || page < 1 ? 1 : page;
@@ -65,15 +71,58 @@ export const listUsers = async ({
     const skip = (safePage - 1) * safePageSize;
     const take = safePageSize;
 
+    const filters: Prisma.UserWhereInput[] = [];
+
+    if (name) {
+      filters.push({
+        OR: [
+          {
+            name: {
+              contains: name,
+              mode: 'insensitive',
+            },
+          },
+          {
+            lastname: {
+              contains: name,
+              mode: 'insensitive',
+            },
+          },
+        ],
+      });
+    }
+
+    if (document) {
+      filters.push({
+        document: {
+          contains: document,
+        },
+      });
+    }
+
+    if (phone) {
+      filters.push({
+        phone: {
+          contains: phone,
+        },
+      });
+    }
+
+    const where: Prisma.UserWhereInput | undefined =
+      filters.length > 0 ? { AND: filters } : undefined;
+
     const [rawUsers, itemsTotal] = await Promise.all([
       userRepository.findAll({
         skip,
         take,
+        where,
       }),
-      userRepository.countAll(),
+      userRepository.countAll(where),
     ]);
 
-    const users: UserWithoutPassword[] = rawUsers.map(({ password, ...rest }) => rest);
+    const users: UserWithoutPassword[] = rawUsers.map(
+      ({ password, ...rest }) => rest
+    );
     const totalPage = itemsTotal > 0 ? Math.ceil(itemsTotal / safePageSize) : 0;
 
     const response: ListUsersResponse = {
@@ -108,4 +157,3 @@ export const listUsers = async ({
     };
   }
 };
-

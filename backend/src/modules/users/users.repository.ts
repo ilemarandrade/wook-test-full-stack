@@ -1,4 +1,4 @@
-import { User } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import prisma from '../../prisma/client';
 
 export interface CreateUserData {
@@ -23,8 +23,8 @@ export interface IUserRepository {
   findById(id: string): Promise<User | null>;
   findByEmail(email: string): Promise<User | null>;
   findByDocument(document: string): Promise<User | null>;
-  findAll(params?: { skip?: number; take?: number }): Promise<User[]>;
-  countAll(): Promise<number>;
+  findAll(params?: { skip?: number; take?: number; where?: Prisma.UserWhereInput }): Promise<User[]>;
+  countAll(where?: Prisma.UserWhereInput): Promise<number>;
   create(data: CreateUserData): Promise<User>;
   update(id: string, data: UpdateUserData): Promise<User>;
   updateResetPasswordToken(id: string, token: string): Promise<User>;
@@ -44,16 +44,17 @@ class PrismaUserRepository implements IUserRepository {
     return prisma.user.findFirst({ where: { document } });
   }
 
-  async findAll(params?: { skip?: number; take?: number }): Promise<User[]> {
-    const { skip, take } = params || {};
+  async findAll(params?: { skip?: number; take?: number; where?: Prisma.UserWhereInput }): Promise<User[]> {
+    const { skip, take, where } = params || {};
     return prisma.user.findMany({
       skip,
       take,
+      where,
     });
   }
 
-  async countAll(): Promise<number> {
-    return prisma.user.count();
+  async countAll(where?: Prisma.UserWhereInput): Promise<number> {
+    return prisma.user.count({ where });
   }
 
   async create(data: CreateUserData): Promise<User> {

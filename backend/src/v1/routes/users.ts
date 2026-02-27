@@ -4,6 +4,7 @@ import verifyUserToken from '../../midlewares/verifyUserToken';
 import { updateMeValidator } from '../../midlewares/validators/authValidators';
 import validateRequest from '../../midlewares/validators/validateRequest';
 import { requireRoles } from '../../midlewares/requireRoles';
+import { listUsersValidator } from '../../midlewares/validators/usersValidators';
 
 const router = express.Router();
 
@@ -21,6 +22,8 @@ router.get(
   '/',
   verifyUserToken,
   requireRoles(['ADMIN']),
+  listUsersValidator,
+  validateRequest,
   userController.listUsers
 );
 
