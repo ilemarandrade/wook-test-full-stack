@@ -1,0 +1,54 @@
+# Entorno de producción: build de imágenes backend/frontend sin hot-reload.
+
+services:
+  db:
+    image: postgres:17
+    container_name: woow_db_prod
+    restart: unless-stopped
+    env_file:
+      - ./.env.docker
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      # Usamos $$ para que Docker Compose no expanda las vars en el host
+      # y sea el shell dentro del contenedor quien use POSTGRES_USER/POSTGRES_DB.
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: woow_backend_prod
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - ./.env.docker
+    environment:
+      NODE_ENV: production
+    ports:
+      - "4000:4000"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        # VITE_API_URL debe venir del entorno (por ejemplo, .env.docker o vars de CI/CD)
+        VITE_API_URL: ${VITE_API_URL}
+    container_name: woow_frontend_prod
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      # Host 8080 -> contenedor Nginx 80
+      - "8080:80"
+
+volumes:
+  db-data:
