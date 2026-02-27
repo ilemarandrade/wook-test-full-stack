@@ -18,6 +18,31 @@ export const signupValidator = [
 
 export const updateUserValidator = [
   body('user').notEmpty().withMessage('User data is required'),
+  body('user.id').notEmpty().withMessage('User id is required'),
+  body('user').custom((user) => {
+    if (typeof user !== 'object' || user === null) {
+      throw new Error('User data must be an object');
+    }
+
+    const allowedKeys = ['id', 'name', 'lastname', 'document', 'phone', 'lang'];
+    const invalidKeys = Object.keys(user).filter((key) => !allowedKeys.includes(key));
+
+    if (invalidKeys.length > 0) {
+      throw new Error(
+        `User contains invalid fields: ${invalidKeys.join(', ')}`
+      );
+    }
+
+    return true;
+  }),
+  body('user.name').optional().isString().withMessage('Name must be a string'),
+  body('user.lastname').optional().isString().withMessage('Lastname must be a string'),
+  body('user.document').optional().isString().withMessage('Document must be a string'),
+  body('user.phone').optional().isString().withMessage('Phone must be a string'),
+  body('user.lang')
+    .optional()
+    .isIn(['es', 'en'])
+    .withMessage('Lang must be either \"es\" or \"en\"'),
 ];
 
 export const forgotPasswordValidator = [

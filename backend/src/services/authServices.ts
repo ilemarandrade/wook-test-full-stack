@@ -138,13 +138,8 @@ const createUser = async ({
 };
 
 interface IUpdateUser {
-  prevUserData: {
-    user: {
-      id: string;
-      lang?: Lang;
-    };
-  };
   dataToUpdateUser: {
+    id: string;
     name?: string;
     lastname?: string;
     document?: string;
@@ -155,15 +150,14 @@ interface IUpdateUser {
 }
 
 const updateUser = async ({
-  prevUserData,
   dataToUpdateUser,
   langCurrent,
 }: IUpdateUser): Promise<IResponseServices> => {
-  const { user: { id, lang } } = prevUserData;
-  const { t } = handleTraductions(dataToUpdateUser.lang || lang || langCurrent);
+  const { t } = handleTraductions(dataToUpdateUser.lang || langCurrent);
 
+  const { id: userId, ...dataToSave } = dataToUpdateUser;
   try {
-    await userRepository.update(id, dataToUpdateUser);
+    await userRepository.update(userId, dataToSave);
 
     return {
       statusCode: 200,

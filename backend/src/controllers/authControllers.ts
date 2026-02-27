@@ -1,9 +1,8 @@
 import authServices from '../services/authServices';
-import jwt from 'jsonwebtoken';
 import handleTraductions from '../utils/handleTraductions';
 import { Response } from 'express';
 import { IRequest } from '../models/Request';
-import { getJwtSecret } from '../utils/jwtHelper';
+import { userRepository } from '../repositories/userRepository';
 
 const login = async (req: IRequest, res: Response) => {
   const { lang = 'en' } = req.headers;
@@ -18,13 +17,25 @@ const user_information = async (req: IRequest, res: Response) => {
   const { t } = handleTraductions(lang);
 
   try {
-    const token = req.token;
-    if (token) {
-      const verified = jwt.verify(token, getJwtSecret());
-      return res.status(200).send(verified);
+    const userId = req.user.user.id;
+
+    const user = await userRepository.findById(userId);
+    if (!user) {
+      return res.status(404).send({ message: t('message.login.wrong_data') });
     }
 
-    throw 'Token not exist';
+    const userPayload = {
+      id: user.id,
+      name: user.name,
+      lastname: user.lastname,
+      email: user.email,
+      phone: user.phone,
+      document: user.document,
+      lang: user.lang,
+      role: user.role,
+    };
+
+    return res.status(200).send({ user: userPayload });
   } catch (err) {
     console.log(err);
     res.status(401).send({ message: t('message.authorization_incorrect') });
@@ -45,12 +56,11 @@ const createNewUser = async (req: IRequest, res: Response) => {
 
 const updateUser = async (req: IRequest, res: Response) => {
   const { lang = 'en' } = req.headers;
-  const prevUserData = { user: req.user.user }; // from middleware JWT payload
+  const currentUser = { user: req.user.user }; // from middleware JWT payload
   const dataToUpdateUser = req.body.user;
 
   const { statusCode, response } = await authServices.updateUser({
-    langCurrent: lang,
-    prevUserData,
+    langCurrent: currentUser.user.lang || lang ,
     dataToUpdateUser,
   });
 
