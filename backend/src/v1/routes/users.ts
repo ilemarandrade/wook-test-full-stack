@@ -4,6 +4,9 @@ import verifyUserToken from '../../midlewares/verifyUserToken';
 import validateRequest from '../../midlewares/validators/validateRequest';
 import { requireRoles } from '../../midlewares/requireRoles';
 import { listUsersValidator, updateMeValidator } from '../../midlewares/validators/usersValidators';
+import { mapToDto } from '../../midlewares/validators/mapToDto';
+import { toUpdateMeDto } from '../../modules/users/dtos/UpdateMeDto';
+import { toListUsersQueryDto } from '../../modules/users/dtos/ListUsersQueryDto';
 
 const router = express.Router();
 
@@ -14,6 +17,7 @@ router.put(
   verifyUserToken,
   updateMeValidator,
   validateRequest,
+  mapToDto(toUpdateMeDto, 'body'),
   userController.updateMe
 );
 
@@ -23,8 +27,10 @@ router.get(
   requireRoles(['ADMIN']),
   listUsersValidator,
   validateRequest,
+  mapToDto(toListUsersQueryDto, 'query'),
   userController.listUsers
 );
 
 export default router;
+
 

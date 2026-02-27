@@ -2,6 +2,7 @@ import authServices from './auth.service';
 import { Response } from 'express';
 import { IRequest } from '../../models/Request';
 import type { LoginDto } from './dtos/LoginDto';
+import type { SignupUserDto } from './dtos/SignupUserDto';
 
 const login = async (req: IRequest<LoginDto>, res: Response) => {
   const { lang = 'en' } = req.headers;
@@ -15,12 +16,12 @@ const login = async (req: IRequest<LoginDto>, res: Response) => {
   res.status(statusCode).send(response);
 };
 
-const createNewUser = async (req: IRequest, res: Response) => {
+const createNewUser = async (req: IRequest<SignupUserDto>, res: Response) => {
   const { lang = 'en' } = req.headers;
-  const user = req.body.user;
+  const dto = req.dto as SignupUserDto;
 
   const { statusCode, response } = await authServices.createUser({
-    user,
+    user: dto.user,
     lang,
   });
 
@@ -33,5 +34,4 @@ const authController = {
 };
 
 export default authController;
-
 

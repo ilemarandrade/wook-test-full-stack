@@ -7,6 +7,7 @@ import {
 import validateRequest from '../../midlewares/validators/validateRequest';
 import { mapToDto } from '../../midlewares/validators/mapToDto';
 import { toLoginDto } from '../../modules/auth/dtos/LoginDto';
+import { toSignupUserDto } from '../../modules/auth/dtos/SignupUserDto';
 
 const router = express.Router();
 
@@ -22,6 +23,7 @@ router.post(
   '/register',
   signupValidator,
   validateRequest,
+  mapToDto(toSignupUserDto, 'body'),
   authController.createNewUser
 );
 

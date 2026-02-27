@@ -3,6 +3,9 @@ import { IRequest } from '../../models/Request';
 import handleTraductions from '../../utils/handleTraductions';
 import { userRepository } from './users.repository';
 import { updateMe as updateMeService, listUsers as listUsersService } from './users.service';
+import { toUserDTO } from './dtos/UserDTO';
+import type { UpdateMeDto } from './dtos/UpdateMeDto';
+import type { ListUsersQueryDto } from './dtos/ListUsersQueryDto';
 
 export const getMe = async (req: IRequest, res: Response) => {
   const { lang = 'en' } = req.headers;
@@ -16,28 +19,20 @@ export const getMe = async (req: IRequest, res: Response) => {
       return res.status(404).send({ message: t('message.login.wrong_data') });
     }
 
-    const userPayload = {
-      id: user.id,
-      name: user.name,
-      lastname: user.lastname,
-      email: user.email,
-      phone: user.phone,
-      document: user.document,
-      lang: user.lang,
-      role: user.role,
-    };
+    const userDto = toUserDTO(user);
 
-    return res.status(200).send({ user: userPayload });
+    return res.status(200).send({ user: userDto });
   } catch (err) {
     console.log(err);
     res.status(401).send({ message: t('message.authorization_incorrect') });
   }
 };
 
-export const updateMe = async (req: IRequest, res: Response) => {
+export const updateMe = async (req: IRequest<UpdateMeDto>, res: Response) => {
   const { lang = 'en' } = req.headers;
   const currentUser = { user: req.user.user }; // from middleware JWT payload
-  const dataToUpdateUser = req.body.user;
+  const dto = req.dto as UpdateMeDto;
+  const dataToUpdateUser = dto.user;
 
   const { statusCode, response } = await updateMeService({
     langCurrent: currentUser.user.lang || lang,
@@ -47,13 +42,12 @@ export const updateMe = async (req: IRequest, res: Response) => {
   res.status(statusCode).send(response);
 };
 
-export const listUsers = async (req: IRequest, res: Response) => {
-  const page = Number(req?.query?.page) || 1;
-  const pageSize = Number(req.query.pageSize) || 10;
+export const listUsers = async (req: IRequest<ListUsersQueryDto>, res: Response) => {
+  const dto = req.dto as ListUsersQueryDto;
 
-  const name = req?.query?.name as string | undefined;
-  const document = req?.query?.document as string | undefined;
-  const phone = req?.query?.phone as string | undefined;
+  const page = dto.page ?? 1;
+  const pageSize = dto.pageSize ?? 10;
+  const { name, document, phone } = dto;
 
   const { statusCode, response } = await listUsersService({
     page,

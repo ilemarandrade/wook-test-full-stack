@@ -2,6 +2,7 @@ import handleTraductions from '../../utils/handleTraductions';
 import { IResponseServices, Lang } from '../../models/Request';
 import { userRepository } from './users.repository';
 import { Prisma, User } from '@prisma/client';
+import { toUserDTO, UserResponseDto } from './dtos/UserDTO';
 
 interface IUpdateMeInput {
   dataToUpdateUser: {
@@ -23,10 +24,8 @@ interface IListUsersInput {
   phone?: string;
 }
 
-type UserWithoutPassword = Omit<User, 'password'>;
-
 interface ListUsersResponse {
-  users: UserWithoutPassword[];
+  users: UserResponseDto[];
   itemsTotal: number;
   page: number;
   totalPage: number;
@@ -125,9 +124,7 @@ export const listUsers = async ({
       userRepository.countAll(where),
     ]);
 
-    const users: UserWithoutPassword[] = rawUsers.map(
-      ({ password, ...rest }) => rest
-    );
+    const users: UserResponseDto[] = rawUsers.map((user: User) => toUserDTO(user));
     const totalPage = itemsTotal > 0 ? Math.ceil(itemsTotal / safePageSize) : 0;
 
     const response: ListUsersResponse = {
@@ -162,3 +159,4 @@ export const listUsers = async ({
     };
   }
 };
+
