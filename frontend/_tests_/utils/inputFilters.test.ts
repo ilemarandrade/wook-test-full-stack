@@ -1,4 +1,4 @@
-import { filterLetters, filterNumbers } from './inputFilters';
+import { filterLetters, filterNumbers } from '../../src/utils/inputFilters';
 
 describe('inputFilters', () => {
   describe('filterNumbers', () => {
@@ -25,4 +25,3 @@ describe('inputFilters', () => {
     });
   });
 });
-

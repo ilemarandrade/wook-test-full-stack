@@ -104,7 +104,8 @@ apiClient.interceptors.response.use(
 );
 
 export function getApiErrorMessage(err: unknown): string {
-  return (err as ApiErrorData)?.message ?? DEFAULT_ERROR_MESSAGE;
+  const message = (err as ApiErrorData)?.message;
+  return message != null ? String(message) : DEFAULT_ERROR_MESSAGE;
 }
 
 export default apiClient;
