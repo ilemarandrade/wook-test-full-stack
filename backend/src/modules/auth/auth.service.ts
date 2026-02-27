@@ -1,11 +1,11 @@
 import jwt from 'jsonwebtoken';
-import handleTraductions from '../utils/handleTraductions';
-import { transporter } from '../utils/sendEmail';
-import recoveryPasswordMail from '../constants/mails/recoveryPassword';
-import { encrypt, compare } from '../utils/encryptPassword';
-import { IResponseServices, Lang } from '../models/Request';
-import { userRepository } from '../repositories/userRepository';
-import { getJwtSecret } from '../utils/jwtHelper';
+import handleTraductions from '../../utils/handleTraductions';
+import { transporter } from '../../utils/sendEmail';
+import recoveryPasswordMail from '../../constants/mails/recoveryPassword';
+import { encrypt, compare } from '../../utils/encryptPassword';
+import { IResponseServices, Lang } from '../../models/Request';
+import { getJwtSecret } from '../../utils/jwtHelper';
+import { userRepository } from '../users/users.repository';
 
 interface ILogin {
   user: {
@@ -19,7 +19,6 @@ interface IResponseLogin {
   jwt?: string;
   message?: string;
 }
-
 
 const login = async ({
   user,
@@ -137,41 +136,6 @@ const createUser = async ({
   }
 };
 
-interface IUpdateUser {
-  dataToUpdateUser: {
-    id: string;
-    name?: string;
-    lastname?: string;
-    document?: string;
-    phone?: string;
-    lang?: Lang;
-  };
-  langCurrent: Lang;
-}
-
-const updateUser = async ({
-  dataToUpdateUser,
-  langCurrent,
-}: IUpdateUser): Promise<IResponseServices> => {
-  const { t } = handleTraductions(dataToUpdateUser.lang || langCurrent);
-
-  const { id: userId, ...dataToSave } = dataToUpdateUser;
-  try {
-    await userRepository.update(userId, dataToSave);
-
-    return {
-      statusCode: 200,
-      response: { message: t('message.success') },
-    };
-  } catch (error) {
-    console.log(error);
-    return {
-      statusCode: 400,
-      response: { message: t('message.error_unexpected') },
-    };
-  }
-};
-
 interface IForgotPassword {
   lang: Lang;
   email: string;
@@ -272,7 +236,7 @@ const newPassword = async ({
     await userRepository.updateResetPasswordToken(id, '');
 
     // Actualizar password directamente usando prisma para no exponerlo en DTOs
-    await (await import('../prisma/client')).default.user.update({
+    await (await import('../../prisma/client')).default.user.update({
       where: { id },
       data: { password: newPasswordFormat },
     });
@@ -294,4 +258,6 @@ const newPassword = async ({
   }
 };
 
-export default { login, createUser, updateUser, forgotPassword, newPassword };
+export default { login, createUser, forgotPassword, newPassword };
+
+
