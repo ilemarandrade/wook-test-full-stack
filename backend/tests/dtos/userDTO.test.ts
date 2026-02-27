@@ -36,6 +36,7 @@ describe('UserDTO', () => {
     });
 
     expect((dto as unknown as { password?: string }).password).toBeUndefined();
+    expect((dto as unknown as { token_to_reset_password?: string }).token_to_reset_password).toBeUndefined();
   });
 });
 
