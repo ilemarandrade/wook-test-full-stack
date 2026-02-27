@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import toast from 'react-hot-toast';
+import i18n from '../i18n/config';
 
 const apiUrl =
   (import.meta as { env?: { VITE_API_URL?: string } }).env?.VITE_API_URL ||
@@ -30,6 +31,7 @@ export interface TypedAxiosInstance extends AxiosInstance {
 }
 
 const AUTH_STORAGE_KEY = 'woow_auth';
+const LANG_STORAGE_KEY = 'woow_lang';
 
 function getAuthFromStorage(): { token?: string; user?: { lang?: string | null } } | null {
   try {
@@ -53,7 +55,16 @@ apiClient.interceptors.request.use((config) => {
   if (auth?.token) {
     config.headers.Authorization = `Bearer ${auth.token}`;
   }
-  const lang = auth?.user?.lang ?? 'en';
+  let lang: string | null = null;
+  if (typeof window !== 'undefined') {
+    const storedLang = window.localStorage.getItem(LANG_STORAGE_KEY);
+    if (storedLang === 'es' || storedLang === 'en') {
+      lang = storedLang;
+    }
+  }
+  if (!lang) {
+    lang = auth?.user?.lang ?? 'es';
+  }
   config.headers.lang = lang;
   return config;
 });
@@ -66,7 +77,7 @@ apiClient.interceptors.response.use(
       // Sesión vencida / token inválido
       localStorage.removeItem(AUTH_STORAGE_KEY);
       if (window.location.pathname !== '/login') {
-        toast.error('Se venció la sesión. Inicia sesión nuevamente.');
+        toast.error(i18n.t('session.expired'));
 
         setTimeout(() => {
           window.location.replace('/login');

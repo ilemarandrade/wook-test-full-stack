@@ -69,6 +69,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     localStorage.removeItem(STORAGE_KEY);
   }, []);
 
+
   const getUserInformation = useCallback(() => {
     authService.getCurrentUser().then((data)=>{
       if (data) {
