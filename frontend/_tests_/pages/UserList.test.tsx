@@ -98,7 +98,6 @@ describe('UserList page', () => {
     });
     vi.mocked(useUserFilters).mockReturnValue({
       appliedFilters: { name: '', document: '', phone: '' } as UserFilterValues,
-      searchVersion: 0,
       applyFilters: mockApplyFilters,
       clearFilters: mockClearFilters,
     });

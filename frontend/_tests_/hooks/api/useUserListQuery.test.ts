@@ -57,7 +57,6 @@ describe('useUserListQuery', () => {
           page: 2,
           pageSize: 20,
           filters,
-          searchVersion: 1,
         }),
       { wrapper: createWrapper() }
     );
@@ -100,7 +99,6 @@ describe('useUserListQuery', () => {
           page: 1,
           pageSize: 10,
           filters: defaultFilters,
-          searchVersion: 0,
         }),
       { wrapper: createWrapper() }
     );
@@ -111,7 +109,7 @@ describe('useUserListQuery', () => {
     });
   });
 
-  it('re-runs query when searchVersion or filters change', async () => {
+  it('re-runs query when filters change', async () => {
     const listResponse = {
       users: [],
       itemsTotal: 0,
@@ -121,7 +119,7 @@ describe('useUserListQuery', () => {
     mockListUsers.mockResolvedValue(listResponse);
 
     const { result, rerender } = renderHook(
-      (props: { page: number; pageSize: number; filters: typeof defaultFilters; searchVersion: number }) =>
+      (props: { page: number; pageSize: number; filters: typeof defaultFilters }) =>
         useUserListQuery(props),
       {
         wrapper: createWrapper(),
@@ -129,7 +127,6 @@ describe('useUserListQuery', () => {
           page: 1,
           pageSize: 10,
           filters: defaultFilters,
-          searchVersion: 0,
         },
       }
     );
@@ -142,7 +139,6 @@ describe('useUserListQuery', () => {
       page: 1,
       pageSize: 10,
       filters: { ...defaultFilters, name: 'Jane' },
-      searchVersion: 1,
     });
 
     await waitFor(() => {

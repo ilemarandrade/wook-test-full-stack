@@ -7,7 +7,6 @@ export interface UseUserListQueryArgs {
   page: number;
   pageSize: number;
   filters: UserFilterValues;
-  searchVersion: number;
 }
 
 const USER_LIST_QUERY_KEY = ['user_list'] as const;
