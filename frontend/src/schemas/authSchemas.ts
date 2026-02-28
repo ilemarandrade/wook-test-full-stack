@@ -6,26 +6,31 @@ export interface LoginFormValues {
   password: string;
 }
 
+/** Mensajes de validación genéricos (validation.required, validation.emailInvalid, etc.) */
+const msg = (t: TFunction, key: string) => t(`validation.${key}`);
+
 /**
  * Crea el schema de login con mensajes de error traducidos.
- * Recibe t() de useTranslation() para mostrar errores según el idioma del usuario.
- * No incluye el nombre del campo en el mensaje; el texto es la traducción completa.
+ * Usa claves genéricas (validation.*) sin nombre de campo.
  */
 export function createLoginSchema(t: TFunction) {
+  const m = (k: string) => msg(t, k);
   return Joi.object<LoginFormValues>({
     email: Joi.string()
       .email()
       .required()
       .messages({
-        'string.empty': t('login.errors.emailRequired'),
-        'string.email': t('login.errors.emailInvalid'),
+        'string.empty': m('required'),
+        'any.required': m('required'),
+        'string.email': m('emailInvalid'),
       }),
     password: Joi.string()
       .min(8)
       .required()
       .messages({
-        'string.empty': t('login.errors.passwordRequired'),
-        'string.min': t('login.errors.passwordMinLength'),
+        'string.empty': m('required'),
+        'any.required': m('required'),
+        'string.min': m('minLength8'),
       }),
   });
 }
@@ -49,6 +54,65 @@ export interface RegisterFormValues {
   confirmPassword: string;
 }
 
+/**
+ * Crea el schema de registro con mensajes de error traducidos.
+ * Usa claves genéricas (validation.*) sin nombre de campo.
+ */
+export function createRegisterSchema(t: TFunction) {
+  const m = (k: string) => msg(t, k);
+  const req = { 'string.empty': m('required'), 'any.required': m('required') };
+  return Joi.object<RegisterFormValues>({
+    name: Joi.string()
+      .min(2)
+      .max(100)
+      .required()
+      .messages({ ...req, 'string.min': m('minLength2'), 'string.max': m('maxLength100') }),
+    lastname: Joi.string()
+      .min(2)
+      .max(100)
+      .required()
+      .messages({ ...req, 'string.min': m('minLength2'), 'string.max': m('maxLength100') }),
+    email: Joi.string()
+      .email({ tlds: { allow: false } })
+      .required()
+      .messages({ ...req, 'string.email': m('emailInvalid') }),
+    document: Joi.string()
+      .pattern(/^\d+$/)
+      .min(7)
+      .max(15)
+      .required()
+      .messages({
+        ...req,
+        'string.pattern.base': m('onlyDigits'),
+        'string.min': m('length7To15'),
+        'string.max': m('length7To15'),
+      }),
+    phone: Joi.string()
+      .pattern(/^\d+$/)
+      .min(7)
+      .max(15)
+      .required()
+      .messages({
+        ...req,
+        'string.pattern.base': m('onlyDigits'),
+        'string.min': m('length7To15'),
+        'string.max': m('length7To15'),
+      }),
+    password: Joi.string()
+      .min(8)
+      .required()
+      .messages({ ...req, 'string.min': m('minLength8') }),
+    confirmPassword: Joi.string()
+      .valid(Joi.ref('password'))
+      .required()
+      .messages({
+        ...req,
+        'any.only': m('passwordsDoNotMatch'),
+      }),
+  });
+}
+
+/** @deprecated Usar createRegisterSchema(t) para mensajes traducidos */
 export const registerSchema = Joi.object<RegisterFormValues>({
   name: Joi.string().min(2).max(100).required().label('Name'),
   lastname: Joi.string().min(2).max(100).required().label('Lastname'),

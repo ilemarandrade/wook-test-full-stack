@@ -1,4 +1,14 @@
 {
+  "validation": {
+    "required": "Field required",
+    "emailInvalid": "Invalid email",
+    "minLength2": "At least 2 characters",
+    "minLength8": "At least 8 characters",
+    "maxLength100": "Max 100 characters",
+    "length7To15": "Between 7 and 15 digits",
+    "onlyDigits": "Only numbers",
+    "passwordsDoNotMatch": "Passwords do not match"
+  },
   "layout": {
     "title": "Woow Test",
     "users": "Users",
@@ -12,13 +22,7 @@
     "submit": "Sign in",
     "submitting": "Signing in...",
     "noAccount": "Don't have an account?",
-    "goRegister": "Register",
-    "errors": {
-      "emailRequired": "Email is required",
-      "emailInvalid": "Please enter a valid email address",
-      "passwordRequired": "Password is required",
-      "passwordMinLength": "Password must be at least 8 characters"
-    }
+    "goRegister": "Register"
   },
   "register": {
     "title": "Register",

@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { useTranslation } from 'react-i18next';
-import { RegisterFormValues, registerSchema } from '../schemas/authSchemas';
+import { RegisterFormValues, createRegisterSchema } from '../schemas/authSchemas';
 import { TextFieldControlled } from '../components/form/TextFieldControlled';
 import { PasswordFieldControlled } from '../components/form/PasswordFieldControlled';
 import { Button } from '../components/ui/Button';
@@ -14,9 +14,10 @@ import toast from 'react-hot-toast';
 const Register: React.FC = () => {
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const registerMutation = useRegisterMutation();
+  const registerSchema = useMemo(() => createRegisterSchema(t), [t, i18n.language]);
   const {
     control,
     handleSubmit,
