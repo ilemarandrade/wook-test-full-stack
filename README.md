@@ -190,6 +190,84 @@ woow-test/
 - **PUT** `/api/v1/users/me` — Actualizar perfil.
 - **GET** `/api/v1/users` — Listado de usuarios (solo rol **ADMIN**).
 
+### Endpoints disponibles con ejemplos
+
+Ejemplos con **axios** (como en el frontend). Base URL: `http://localhost:4000` (o el `PORT` configurado).
+
+```javascript
+import axios from 'axios';
+
+const API_URL = 'http://localhost:4000/api/v1';
+```
+
+**Registro**
+
+```javascript
+const { data } = await axios.post(`${API_URL}/auth/register`, {
+  user: {
+    name: 'Juan',
+    lastname: 'Pérez',
+    email: 'juan@example.com',
+    password: 'MiClave123',
+    document: '12345678',
+    phone: '9876543210',
+    lang: 'es',
+  },
+});
+// data: { message }
+```
+
+**Login**
+
+```javascript
+const { data } = await axios.post(`${API_URL}/auth/login`, {
+  user: {
+    email: 'juan@example.com',
+    password: 'MiClave123',
+  },
+});
+// data: { jwt: 'eyJhbGciOiJIUzI1NiIs...' }
+// Guarda data.jwt y úsalo en Authorization para las rutas protegidas.
+```
+
+**Perfil (GET)** — requiere token
+
+```javascript
+const token = 'TU_JWT_AQUI';
+const { data } = await axios.get(`${API_URL}/users/me`, {
+  headers: { Authorization: `Bearer ${token}` },
+});
+```
+
+**Actualizar perfil (PUT)** — requiere token
+
+```javascript
+const token = 'TU_JWT_AQUI';
+await axios.put(
+  `${API_URL}/users/me`,
+  {
+    user: {
+      name: 'Juan',
+      lastname: 'García',
+      document: '87654321',
+      phone: '1234567890',
+      lang: 'en',
+    },
+  },
+  { headers: { Authorization: `Bearer ${token}` } }
+);
+```
+
+**Listado de usuarios** — requiere token y rol **ADMIN**. Query opcionales: `page`, `pageSize`, `name`, `document`, `phone`.
+
+```javascript
+const token = 'TU_JWT_ADMIN';
+const { data } = await axios.get(`${API_URL}/users`, {
+  params: { page: 1, pageSize: 10 },
+  headers: { Authorization: `Bearer ${token}` },
+});
+```
+
 ---
 
 ## Testing
