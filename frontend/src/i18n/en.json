@@ -4,7 +4,7 @@
     "emailInvalid": "Invalid email",
     "minLength2": "At least 2 characters",
     "minLength8": "At least 8 characters",
-    "maxLength100": "Max 100 characters",
+    "maxLength25": "Max 25 characters",
     "length7To15": "Between 7 and 15 digits",
     "onlyDigits": "Only numbers",
     "passwordsDoNotMatch": "Passwords do not match"

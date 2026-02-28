@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useTranslation } from "react-i18next";
-import { ProfileFormValues, profileSchema } from "../schemas/authSchemas";
+import { ProfileFormValues, createProfileSchema } from "../schemas/authSchemas";
 import { TextFieldControlled } from "../components/form/TextFieldControlled";
 import { Button } from "../components/ui/Button";
 import { useUpdateProfileMutation, useUserInformation } from "../hooks/api";
@@ -20,6 +20,8 @@ const Profile: React.FC = () => {
     refetch: refetchUser,
   } = useUserInformation();
   const updateProfileMutation = useUpdateProfileMutation();
+  const { t, i18n } = useTranslation();
+  const profileSchema = useMemo(() => createProfileSchema(t), [t, i18n.language]);
   const {
     control,
     handleSubmit,
@@ -28,7 +30,6 @@ const Profile: React.FC = () => {
   } = useForm<ProfileFormValues>({
     resolver: joiResolver(profileSchema),
   });
-  const { t } = useTranslation();
 
   useEffect(() => {
     if (!user) return;

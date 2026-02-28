@@ -64,14 +64,14 @@ export function createRegisterSchema(t: TFunction) {
   return Joi.object<RegisterFormValues>({
     name: Joi.string()
       .min(2)
-      .max(100)
+      .max(25)
       .required()
-      .messages({ ...req, 'string.min': m('minLength2'), 'string.max': m('maxLength100') }),
+      .messages({ ...req, 'string.min': m('minLength2'), 'string.max': m('maxLength25') }),
     lastname: Joi.string()
       .min(2)
-      .max(100)
+      .max(25)
       .required()
-      .messages({ ...req, 'string.min': m('minLength2'), 'string.max': m('maxLength100') }),
+      .messages({ ...req, 'string.min': m('minLength2'), 'string.max': m('maxLength25') }),
     email: Joi.string()
       .email({ tlds: { allow: false } })
       .required()
@@ -114,8 +114,8 @@ export function createRegisterSchema(t: TFunction) {
 
 /** @deprecated Usar createRegisterSchema(t) para mensajes traducidos */
 export const registerSchema = Joi.object<RegisterFormValues>({
-  name: Joi.string().min(2).max(100).required().label('Name'),
-  lastname: Joi.string().min(2).max(100).required().label('Lastname'),
+  name: Joi.string().min(2).max(25).required().label('Name'),
+  lastname: Joi.string().min(2).max(25).required().label('Lastname'),
   email: Joi.string()
     .email({ tlds: { allow: false } })
     .required()
@@ -149,9 +149,53 @@ export interface ProfileFormValues {
   phone?: string;
 }
 
+/**
+ * Crea el schema de perfil con mensajes de error traducidos.
+ * Usa claves genéricas (validation.*) sin nombre de campo.
+ */
+export function createProfileSchema(t: TFunction) {
+  const m = (k: string) => msg(t, k);
+  const req = { 'string.empty': m('required'), 'any.required': m('required') };
+  return Joi.object<ProfileFormValues>({
+    name: Joi.string()
+      .min(2)
+      .max(25)
+      .required()
+      .messages({ ...req, 'string.min': m('minLength2'), 'string.max': m('maxLength25') }),
+    lastname: Joi.string()
+      .min(2)
+      .max(25)
+      .required()
+      .messages({ ...req, 'string.min': m('minLength2'), 'string.max': m('maxLength25') }),
+    document: Joi.string()
+      .pattern(/^\d+$/)
+      .min(7)
+      .max(15)
+      .required()
+      .messages({
+        ...req,
+        'string.pattern.base': m('onlyDigits'),
+        'string.min': m('length7To15'),
+        'string.max': m('length7To15'),
+      }),
+    phone: Joi.string()
+      .pattern(/^\d+$/)
+      .min(7)
+      .max(15)
+      .required()
+      .messages({
+        ...req,
+        'string.pattern.base': m('onlyDigits'),
+        'string.min': m('length7To15'),
+        'string.max': m('length7To15'),
+      }),
+  });
+}
+
+/** @deprecated Usar createProfileSchema(t) para mensajes traducidos */
 export const profileSchema = Joi.object<ProfileFormValues>({
-  name: Joi.string().min(2).max(100).required().label('Name'),
-  lastname: Joi.string().min(2).max(100).required().label('Lastname'),
+  name: Joi.string().min(2).max(25).required().label('Name'),
+  lastname: Joi.string().min(2).max(25).required().label('Lastname'),
   document: Joi.string()
     .pattern(/^\d+$/)
     .min(7)
