@@ -214,7 +214,7 @@ const { data } = await axios.post(`${API_URL}/auth/register`, {
     lang: 'es',
   },
 });
-// data: { message }
+// Devuelve (200): { message: string }
 ```
 
 **Login**
@@ -226,8 +226,8 @@ const { data } = await axios.post(`${API_URL}/auth/login`, {
     password: 'MiClave123',
   },
 });
-// data: { jwt: 'eyJhbGciOiJIUzI1NiIs...' }
-// Guarda data.jwt y úsalo en Authorization para las rutas protegidas.
+// Devuelve (200): { jwt: string }
+// Usa data.jwt en el header Authorization: `Bearer ${data.jwt}` para las rutas protegidas.
 ```
 
 **Perfil (GET)** — requiere token
@@ -237,13 +237,14 @@ const token = 'TU_JWT_AQUI';
 const { data } = await axios.get(`${API_URL}/users/me`, {
   headers: { Authorization: `Bearer ${token}` },
 });
+// Devuelve (200): { user: { id, name, lastname, email, document, phone, lang, role, createdAt, updatedAt } }
 ```
 
 **Actualizar perfil (PUT)** — requiere token
 
 ```javascript
 const token = 'TU_JWT_AQUI';
-await axios.put(
+const { data } = await axios.put(
   `${API_URL}/users/me`,
   {
     user: {
@@ -256,6 +257,7 @@ await axios.put(
   },
   { headers: { Authorization: `Bearer ${token}` } }
 );
+// Devuelve (200): { message: string }
 ```
 
 **Listado de usuarios** — requiere token y rol **ADMIN**. Query opcionales: `page`, `pageSize`, `name`, `document`, `phone`.
@@ -266,6 +268,8 @@ const { data } = await axios.get(`${API_URL}/users`, {
   params: { page: 1, pageSize: 10 },
   headers: { Authorization: `Bearer ${token}` },
 });
+// Devuelve (200): { users: User[], itemsTotal: number, page: number, totalPage: number, prevPage?: number, nextPage?: number }
+// Cada User: { id, name, lastname, email, document, phone, lang, role, createdAt, updatedAt }
 ```
 
 ---
