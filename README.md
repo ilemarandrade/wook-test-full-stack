@@ -12,14 +12,12 @@ Monorepo con **backend** (Node.js + Express + Prisma + PostgreSQL) y **frontend*
 
 ## Stack tecnológico
 
-
 | Capa         | Tecnologías                                                                          |
 | ------------ | ------------------------------------------------------------------------------------ |
 | **Backend**  | Node.js, Express, TypeScript, Prisma, PostgreSQL, JWT, bcrypt, express-validator     |
 | **Frontend** | React 18, Vite, TypeScript, Tailwind CSS, React Router, React Query, React Hook Form |
 | **Testing**  | Backend: Jest + Supertest — Frontend: Vitest + React Testing Library                 |
 | **Infra**    | Docker, Docker Compose                                                               |
-
 
 ---
 
@@ -71,15 +69,20 @@ Para desarrollo **local sin Docker**, en `backend/` copia `.env.example` a `.env
 
 Desde la raíz del repositorio:
 
-- **Desarrollo (hot reload):** `docker compose up --build`
-- **Producción:** `docker compose -f docker-compose.prod.yml up --build`
+- **Desarrollo (hot reload):**
 
 ```bash
-docker compose up --build
+ docker compose up --build
 ```
 
-- **API:** [http://localhost:4000](http://localhost:4000)  
-- **Frontend:** [http://localhost:5173](http://localhost:5173)  
+- **Producción:**
+
+```bash
+docker compose -f docker-compose.prod.yml up --build
+```
+
+- **API:** [http://localhost:4000](http://localhost:4000)
+- **Frontend:** [http://localhost:5173](http://localhost:5173) (desarrollo) — con **producción** (`docker-compose.prod.yml`) el front se sirve en el puerto **8080**: [http://localhost:8080](http://localhost:8080)
 - **PostgreSQL:** puerto 5432 (acceso solo desde red Docker por defecto)
 
 Al levantar, el backend aplica migraciones de Prisma y ejecuta el seed del usuario admin; para que el seed funcione deben estar definidas en `.env.docker` todas las variables de admin (`ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_NAME`, `ADMIN_LASTNAME`, `ADMIN_DOCUMENT`, `ADMIN_PHONE`, `ADMIN_LANG`).
@@ -114,7 +117,6 @@ npm run dev
 
 ### Backend (`backend/`)
 
-
 | Script                   | Descripción                             |
 | ------------------------ | --------------------------------------- |
 | `npm run dev`            | Servidor en modo desarrollo con recarga |
@@ -124,9 +126,7 @@ npm run dev
 | `npm run test:coverage`  | Tests con reporte de cobertura          |
 | `npx prisma migrate dev` | Crea/aplica migraciones                 |
 
-
 ### Frontend (`frontend/`)
-
 
 | Script                  | Descripción                 |
 | ----------------------- | --------------------------- |
@@ -135,7 +135,6 @@ npm run dev
 | `npm run preview`       | Vista previa del build      |
 | `npm test`              | Tests con Vitest            |
 | `npm run test:coverage` | Tests con cobertura         |
-
 
 ---
 
@@ -195,9 +194,9 @@ woow-test/
 Ejemplos con **axios** (como en el frontend). Base URL: `http://localhost:4000` (o el `PORT` configurado).
 
 ```javascript
-import axios from 'axios';
+import axios from "axios";
 
-const API_URL = 'http://localhost:4000/api/v1';
+const API_URL = "http://localhost:4000/api/v1";
 ```
 
 **Registro**
@@ -205,13 +204,13 @@ const API_URL = 'http://localhost:4000/api/v1';
 ```javascript
 const { data } = await axios.post(`${API_URL}/auth/register`, {
   user: {
-    name: 'Juan',
-    lastname: 'Pérez',
-    email: 'juan@example.com',
-    password: 'MiClave123',
-    document: '12345678',
-    phone: '9876543210',
-    lang: 'es',
+    name: "Juan",
+    lastname: "Pérez",
+    email: "juan@example.com",
+    password: "MiClave123",
+    document: "12345678",
+    phone: "9876543210",
+    lang: "es",
   },
 });
 // Devuelve (200): { message: string }
@@ -222,8 +221,8 @@ const { data } = await axios.post(`${API_URL}/auth/register`, {
 ```javascript
 const { data } = await axios.post(`${API_URL}/auth/login`, {
   user: {
-    email: 'juan@example.com',
-    password: 'MiClave123',
+    email: "juan@example.com",
+    password: "MiClave123",
   },
 });
 // Devuelve (200): { jwt: string }
@@ -233,7 +232,7 @@ const { data } = await axios.post(`${API_URL}/auth/login`, {
 **Perfil (GET)** — requiere token
 
 ```javascript
-const token = 'TU_JWT_AQUI';
+const token = "TU_JWT_AQUI";
 const { data } = await axios.get(`${API_URL}/users/me`, {
   headers: { Authorization: `Bearer ${token}` },
 });
@@ -243,19 +242,19 @@ const { data } = await axios.get(`${API_URL}/users/me`, {
 **Actualizar perfil (PUT)** — requiere token
 
 ```javascript
-const token = 'TU_JWT_AQUI';
+const token = "TU_JWT_AQUI";
 const { data } = await axios.put(
   `${API_URL}/users/me`,
   {
     user: {
-      name: 'Juan',
-      lastname: 'García',
-      document: '87654321',
-      phone: '1234567890',
-      lang: 'en',
+      name: "Juan",
+      lastname: "García",
+      document: "87654321",
+      phone: "1234567890",
+      lang: "en",
     },
   },
-  { headers: { Authorization: `Bearer ${token}` } }
+  { headers: { Authorization: `Bearer ${token}` } },
 );
 // Devuelve (200): { message: string }
 ```
@@ -263,7 +262,7 @@ const { data } = await axios.put(
 **Listado de usuarios** — requiere token y rol **ADMIN**. Query opcionales: `page`, `pageSize`, `name`, `document`, `phone`.
 
 ```javascript
-const token = 'TU_JWT_ADMIN';
+const token = "TU_JWT_ADMIN";
 const { data } = await axios.get(`${API_URL}/users`, {
   params: { page: 1, pageSize: 10 },
   headers: { Authorization: `Bearer ${token}` },
