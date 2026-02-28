@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { useTranslation } from 'react-i18next';
-import { LoginFormValues, loginSchema } from '../schemas/authSchemas';
+import { LoginFormValues, createLoginSchema } from '../schemas/authSchemas';
 import { TextFieldControlled } from '../components/form/TextFieldControlled';
 import { PasswordFieldControlled } from '../components/form/PasswordFieldControlled';
 import { Button } from '../components/ui/Button';
@@ -15,9 +15,11 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [error, setError] = useState<string | null>(null);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const loginMutation = useLoginMutation();
+  
+  const loginSchema = useMemo(() => createLoginSchema(t), [t, i18n.language]);
   const {
     control,
     handleSubmit,

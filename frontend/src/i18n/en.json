@@ -12,7 +12,13 @@
     "submit": "Sign in",
     "submitting": "Signing in...",
     "noAccount": "Don't have an account?",
-    "goRegister": "Register"
+    "goRegister": "Register",
+    "errors": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email address",
+      "passwordRequired": "Password is required",
+      "passwordMinLength": "Password must be at least 8 characters"
+    }
   },
   "register": {
     "title": "Register",

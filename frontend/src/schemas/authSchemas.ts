@@ -1,10 +1,36 @@
 import Joi from 'joi';
+import type { TFunction } from 'i18next';
 
 export interface LoginFormValues {
   email: string;
   password: string;
 }
 
+/**
+ * Crea el schema de login con mensajes de error traducidos.
+ * Recibe t() de useTranslation() para mostrar errores según el idioma del usuario.
+ * No incluye el nombre del campo en el mensaje; el texto es la traducción completa.
+ */
+export function createLoginSchema(t: TFunction) {
+  return Joi.object<LoginFormValues>({
+    email: Joi.string()
+      .email()
+      .required()
+      .messages({
+        'string.empty': t('login.errors.emailRequired'),
+        'string.email': t('login.errors.emailInvalid'),
+      }),
+    password: Joi.string()
+      .min(8)
+      .required()
+      .messages({
+        'string.empty': t('login.errors.passwordRequired'),
+        'string.min': t('login.errors.passwordMinLength'),
+      }),
+  });
+}
+
+/** @deprecated Usar createLoginSchema(t) para mensajes traducidos */
 export const loginSchema = Joi.object<LoginFormValues>({
   email: Joi.string()
     .email()
