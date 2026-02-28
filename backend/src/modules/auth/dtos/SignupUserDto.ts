@@ -41,5 +41,3 @@ export function toSignupUserDto(body: unknown): SignupUserDto {
     },
   };
 }
-
-

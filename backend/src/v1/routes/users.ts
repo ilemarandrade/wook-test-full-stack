@@ -3,7 +3,10 @@ import * as userController from '../../modules/users/users.controller';
 import verifyUserToken from '../../midlewares/verifyUserToken';
 import validateRequest from '../../midlewares/validators/validateRequest';
 import { requireRoles } from '../../midlewares/requireRoles';
-import { listUsersValidator, updateMeValidator } from '../../midlewares/validators/usersValidators';
+import {
+  listUsersValidator,
+  updateMeValidator,
+} from '../../midlewares/validators/usersValidators';
 import { mapToDto } from '../../midlewares/validators/mapToDto';
 import { toUpdateMeDto } from '../../modules/users/dtos/UpdateMeDto';
 import { toListUsersQueryDto } from '../../modules/users/dtos/ListUsersQueryDto';
@@ -32,5 +35,3 @@ router.get(
 );
 
 export default router;
-
-

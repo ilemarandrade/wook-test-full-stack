@@ -42,7 +42,9 @@ export const updateMe = async ({
   const { id: userId, ...dataToSave } = dataToUpdateUser;
 
   const dataToSaveCleaned = Object.fromEntries(
-    Object.entries(dataToSave).filter(([, value]) => value !== undefined && value !== '')
+    Object.entries(dataToSave).filter(
+      ([, value]) => value !== undefined && value !== ''
+    )
   );
 
   try {
@@ -124,7 +126,9 @@ export const listUsers = async ({
       userRepository.countAll(where),
     ]);
 
-    const users: UserResponseDto[] = rawUsers.map((user: User) => toUserDTO(user));
+    const users: UserResponseDto[] = rawUsers.map((user: User) =>
+      toUserDTO(user)
+    );
     const totalPage = itemsTotal > 0 ? Math.ceil(itemsTotal / safePageSize) : 0;
 
     const response: ListUsersResponse = {
@@ -159,4 +163,3 @@ export const listUsers = async ({
     };
   }
 };
-

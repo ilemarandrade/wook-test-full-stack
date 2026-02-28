@@ -1,4 +1,3 @@
 export const getJwtSecret = () => {
-    return process.env.JWT_SECRET as string
-  };
-  
+  return process.env.JWT_SECRET as string;
+};

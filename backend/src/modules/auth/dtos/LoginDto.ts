@@ -11,7 +11,7 @@ export interface LoginDto {
  */
 export function toLoginDto(body: unknown): LoginDto {
   const b = body as { user?: { email?: string; password?: string } };
-  
+
   return {
     user: {
       email: b.user?.email ?? '',

@@ -8,7 +8,8 @@ export const loginValidator = [
     .normalizeEmail(),
   body('user.password')
     .isLength({ min: 8 })
-    .withMessage('Password must be at least 8 characters').trim(),
+    .withMessage('Password must be at least 8 characters')
+    .trim(),
 ];
 
 export const signupValidator = [
@@ -50,4 +51,3 @@ export const signupValidator = [
     .isLength({ min: 7, max: 15 })
     .withMessage('Phone must be between 7 and 15 digits long'),
 ];
-

@@ -2,7 +2,10 @@ import { Response } from 'express';
 import { IRequest } from '../../models/Request';
 import handleTraductions from '../../utils/handleTraductions';
 import { userRepository } from './users.repository';
-import { updateMe as updateMeService, listUsers as listUsersService } from './users.service';
+import {
+  updateMe as updateMeService,
+  listUsers as listUsersService,
+} from './users.service';
 import { toUserDTO } from './dtos/UserDTO';
 import type { UpdateMeDto } from './dtos/UpdateMeDto';
 import type { ListUsersQueryDto } from './dtos/ListUsersQueryDto';
@@ -43,7 +46,10 @@ export const updateMe = async (req: IRequest<UpdateMeDto>, res: Response) => {
   res.status(statusCode).send(response);
 };
 
-export const listUsers = async (req: IRequest<ListUsersQueryDto>, res: Response) => {
+export const listUsers = async (
+  req: IRequest<ListUsersQueryDto>,
+  res: Response
+) => {
   const dto = req.dto as ListUsersQueryDto;
 
   const page = dto.page ?? 1;
@@ -60,4 +66,3 @@ export const listUsers = async (req: IRequest<ListUsersQueryDto>, res: Response)
 
   res.status(statusCode).send(response);
 };
-

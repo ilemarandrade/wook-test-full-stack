@@ -23,7 +23,11 @@ export function toListUsersQueryDto(query: unknown): ListUsersQueryDto {
   const rawPageSize = q.pageSize as unknown;
 
   const pageNumber =
-    typeof rawPage === 'number' ? rawPage : rawPage !== undefined ? Number(rawPage) : undefined;
+    typeof rawPage === 'number'
+      ? rawPage
+      : rawPage !== undefined
+      ? Number(rawPage)
+      : undefined;
   const pageSizeNumber =
     typeof rawPageSize === 'number'
       ? rawPageSize
@@ -32,12 +36,16 @@ export function toListUsersQueryDto(query: unknown): ListUsersQueryDto {
       : undefined;
 
   return {
-    page: pageNumber !== undefined && !Number.isNaN(pageNumber) ? pageNumber : undefined,
+    page:
+      pageNumber !== undefined && !Number.isNaN(pageNumber)
+        ? pageNumber
+        : undefined,
     pageSize:
-      pageSizeNumber !== undefined && !Number.isNaN(pageSizeNumber) ? pageSizeNumber : undefined,
+      pageSizeNumber !== undefined && !Number.isNaN(pageSizeNumber)
+        ? pageSizeNumber
+        : undefined,
     name: typeof q.name === 'string' ? q.name : undefined,
     document: typeof q.document === 'string' ? q.document : undefined,
     phone: typeof q.phone === 'string' ? q.phone : undefined,
   };
 }
-

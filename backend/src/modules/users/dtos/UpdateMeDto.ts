@@ -35,4 +35,3 @@ export function toUpdateMeDto(body: unknown): UpdateMeDto {
     },
   };
 }
-

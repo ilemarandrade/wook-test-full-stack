@@ -14,4 +14,3 @@ export function getRequestLang(req: IRequest): Lang {
 
   return 'es';
 }
-

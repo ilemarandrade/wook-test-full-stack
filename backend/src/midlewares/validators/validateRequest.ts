@@ -21,4 +21,3 @@ const validateRequest = (req: IRequest, res: Response, next: NextFunction) => {
 };
 
 export default validateRequest;
-

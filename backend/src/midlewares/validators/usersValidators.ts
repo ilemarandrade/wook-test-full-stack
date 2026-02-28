@@ -28,14 +28,12 @@ export const listUsersValidator = [
     .matches(/^\d+$/)
     .withMessage('document must contain only numbers'),
 
-
   query('phone')
     .optional()
     .isString()
     .withMessage('phone must be a string')
     .matches(/^\d+$/)
-    .withMessage('phone must contain only numbers')
-
+    .withMessage('phone must contain only numbers'),
 ];
 
 export const updateMeValidator = [
@@ -46,7 +44,9 @@ export const updateMeValidator = [
     }
 
     const allowedKeys = ['name', 'lastname', 'document', 'phone', 'lang'];
-    const invalidKeys = Object.keys(user).filter((key) => !allowedKeys.includes(key));
+    const invalidKeys = Object.keys(user).filter(
+      (key) => !allowedKeys.includes(key)
+    );
 
     if (invalidKeys.length > 0) {
       throw new Error(
@@ -91,5 +91,5 @@ export const updateMeValidator = [
   body('user.lang')
     .optional()
     .isIn(['es', 'en'])
-    .withMessage('Lang must be either \"es\" or \"en\"'),
+    .withMessage('Lang must be either "es" or "en"'),
 ];

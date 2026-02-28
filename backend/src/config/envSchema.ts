@@ -19,7 +19,8 @@ export const ENV_SCHEMA: Record<string, EnvVarRule> = {
   },
   DATABASE_URL: {
     required: true,
-    message: 'DATABASE_URL is required (e.g. postgresql://user:pass@host:5432/db)',
+    message:
+      'DATABASE_URL is required (e.g. postgresql://user:pass@host:5432/db)',
     validate: (v: string) =>
       v.trim().length > 0 &&
       (v.startsWith('postgresql://') || v.startsWith('postgres://')),
@@ -63,9 +64,11 @@ export function validateEnvSchema(): EnvValidationError[] {
 }
 
 function formatValidationErrors(errors: EnvValidationError[]): string {
-  const title = '\n[ENV VALIDATION FAILED] Missing or invalid required environment variables.\n';
+  const title =
+    '\n[ENV VALIDATION FAILED] Missing or invalid required environment variables.\n';
   const lines = errors.map((e) => `  • ${e.key}: ${e.message}`);
-  const hint = '\nSet them in .env or in your environment. See .env.example for reference.\n';
+  const hint =
+    '\nSet them in .env or in your environment. See .env.example for reference.\n';
   return title + lines.join('\n') + hint;
 }
 

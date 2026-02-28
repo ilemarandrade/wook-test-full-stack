@@ -59,7 +59,6 @@ export const runInitialUsersSeed = async (): Promise<void> => {
   }
 
   try {
-
     const usersCount = await prisma.user.count();
 
     if (usersCount === 0) {
@@ -97,8 +96,6 @@ export const runInitialUsersSeed = async (): Promise<void> => {
         data: adminData,
       });
     }
-
- 
   } catch (error: unknown) {
     if (
       error instanceof Prisma.PrismaClientKnownRequestError &&
@@ -112,5 +109,3 @@ export const runInitialUsersSeed = async (): Promise<void> => {
     throw error;
   }
 };
-
-

@@ -22,4 +22,3 @@ export const requireRoles = (roles: string[]) => {
     return next();
   };
 };
-

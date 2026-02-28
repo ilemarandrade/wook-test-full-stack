@@ -24,7 +24,11 @@ export interface IUserRepository {
   findByEmail(email: string): Promise<User | null>;
   findByDocument(document: string): Promise<User | null>;
   findByPhone(phone: string): Promise<User | null>;
-  findAll(params?: { skip?: number; take?: number; where?: Prisma.UserWhereInput }): Promise<User[]>;
+  findAll(params?: {
+    skip?: number;
+    take?: number;
+    where?: Prisma.UserWhereInput;
+  }): Promise<User[]>;
   countAll(where?: Prisma.UserWhereInput): Promise<number>;
   create(data: CreateUserData): Promise<User>;
   update(id: string, data: UpdateUserData): Promise<User>;
@@ -49,7 +53,11 @@ class PrismaUserRepository implements IUserRepository {
     return prisma.user.findFirst({ where: { phone } });
   }
 
-  async findAll(params?: { skip?: number; take?: number; where?: Prisma.UserWhereInput }): Promise<User[]> {
+  async findAll(params?: {
+    skip?: number;
+    take?: number;
+    where?: Prisma.UserWhereInput;
+  }): Promise<User[]> {
     const { skip, take, where } = params || {};
     return prisma.user.findMany({
       skip,
@@ -98,5 +106,3 @@ class PrismaUserRepository implements IUserRepository {
 }
 
 export const userRepository = new PrismaUserRepository();
-
-

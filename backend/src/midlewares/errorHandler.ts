@@ -22,4 +22,3 @@ export const errorHandler = (
     message: t('message.error_unexpected'),
   });
 };
-
