@@ -33,7 +33,7 @@ describe('LanguageSwitcher', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockUseAuth.mockReturnValue({ user: null });
-    (global as unknown as { localStorage: Storage }).localStorage = {
+    (globalThis as unknown as { localStorage: Storage }).localStorage = {
       getItem: vi.fn(),
       setItem: vi.fn(),
       removeItem: vi.fn(),
@@ -61,8 +61,8 @@ describe('LanguageSwitcher', () => {
 
   it('stores selected language in localStorage', async () => {
     const setItem = vi.fn();
-    (global as unknown as { localStorage: Storage }).localStorage = {
-      ...(global as unknown as { localStorage: Storage }).localStorage,
+    (globalThis as unknown as { localStorage: Storage }).localStorage = {
+      ...(globalThis as unknown as { localStorage: Storage }).localStorage,
       setItem,
     };
 

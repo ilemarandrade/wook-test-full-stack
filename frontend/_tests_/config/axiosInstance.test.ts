@@ -61,7 +61,7 @@ describe('axiosInstance', () => {
   });
 
   describe('request interceptor', () => {
-    let getItemSpy: ReturnType<typeof vi.spyOn>;
+    let getItemSpy: ReturnType<typeof vi.spyOn<Storage, 'getItem'>>;
 
     beforeEach(() => {
       getItemSpy = vi.spyOn(Storage.prototype, 'getItem');
@@ -80,7 +80,7 @@ describe('axiosInstance', () => {
     });
 
     it('adds Authorization Bearer when token is in localStorage', () => {
-      getItemSpy.mockImplementation((key: string) => {
+      getItemSpy.mockImplementation((key: unknown) => {
         if (key === AUTH_STORAGE_KEY) return JSON.stringify({ token: 'jwt-123' });
         return null;
       });
@@ -90,7 +90,7 @@ describe('axiosInstance', () => {
     });
 
     it('uses user.lang when present in auth storage for lang header', () => {
-      getItemSpy.mockImplementation((key: string) => {
+      getItemSpy.mockImplementation((key: unknown) => {
         if (key === AUTH_STORAGE_KEY)
           return JSON.stringify({ token: 'x', user: { lang: 'en' } });
         return null;
@@ -101,7 +101,7 @@ describe('axiosInstance', () => {
     });
 
     it('uses woow_lang from localStorage when es or en, over auth.user.lang', () => {
-      getItemSpy.mockImplementation((key: string) => {
+      getItemSpy.mockImplementation((key: unknown) => {
         if (key === AUTH_STORAGE_KEY)
           return JSON.stringify({ token: 'x', user: { lang: 'en' } });
         if (key === LANG_STORAGE_KEY) return 'es';
@@ -113,7 +113,7 @@ describe('axiosInstance', () => {
     });
 
     it('defaults lang to es when no woow_lang and no user.lang', () => {
-      getItemSpy.mockImplementation((key: string) => {
+      getItemSpy.mockImplementation((key: unknown) => {
         if (key === AUTH_STORAGE_KEY) return JSON.stringify({ token: 'x' });
         return null;
       });
@@ -126,7 +126,7 @@ describe('axiosInstance', () => {
   describe('response interceptor', () => {
     let removeItemSpy: ReturnType<typeof vi.spyOn>;
     let replaceMock: ReturnType<typeof vi.fn>;
-    let getItemSpy: ReturnType<typeof vi.spyOn>;
+    let getItemSpy: ReturnType<typeof vi.spyOn<Storage, 'getItem'>>;
     const originalLocation = window.location;
 
     beforeEach(() => {
