@@ -11,7 +11,6 @@ const UserList: React.FC = () => {
   const { page, pageSize, setPage, setPageSize, pageSizeOptions } = useUserTableState();
   const {
     appliedFilters,
-    searchVersion,
     applyFilters,
     clearFilters,
   } = useUserFilters();
@@ -25,7 +24,6 @@ const UserList: React.FC = () => {
     page,
     pageSize,
     filters: appliedFilters,
-    searchVersion,
   });
 
   const errorMessage = error ? getApiErrorMessage(error) : undefined;

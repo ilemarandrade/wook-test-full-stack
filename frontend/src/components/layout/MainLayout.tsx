@@ -12,9 +12,9 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <div className="min-h-screen flex flex-col">
         <header className="border-b border-slate-800 bg-slate-950/90">
           <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
-            <Link to="/" className="text-sm font-semibold">
+            <div className="text-sm font-semibold text-[#38bdf8]">
               {t("layout.title")}
-            </Link>
+            </div>
             <div className="flex items-center gap-4 text-sm text-slate-300">
               <nav className="flex gap-4 items-center">
                 {user ? (

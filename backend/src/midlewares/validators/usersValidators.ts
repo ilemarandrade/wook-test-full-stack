@@ -9,8 +9,8 @@ export const listUsersValidator = [
 
   query('pageSize')
     .optional()
-    .isInt({ min: 1, max: 100 })
-    .withMessage('pageSize must be between 1 and 100')
+    .isInt({ min: 1, max: 25 })
+    .withMessage('pageSize must be between 1 and 25')
     .toInt(),
 
   query('name')
@@ -18,8 +18,8 @@ export const listUsersValidator = [
     .isString()
     .withMessage('name must be a string')
     .trim()
-    .isLength({ min: 2, max: 100 })
-    .withMessage('name must be between 2 and 100 characters'),
+    .isLength({ min: 1, max: 25 })
+    .withMessage('name must be between 2 and 25 characters'),
 
   query('document')
     .optional()

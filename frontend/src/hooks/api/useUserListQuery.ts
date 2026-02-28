@@ -16,10 +16,9 @@ export function useUserListQuery({
   page,
   pageSize,
   filters,
-  searchVersion,
 }: UseUserListQueryArgs) {
   return useQuery<ListUsersResponse, ApiErrorData>({
-    queryKey: [...USER_LIST_QUERY_KEY, { page, pageSize, filters, searchVersion }],
+    queryKey: [...USER_LIST_QUERY_KEY, { page, pageSize, filters }],
     queryFn: async () => {
       return await userService.listUsers({
         page,
