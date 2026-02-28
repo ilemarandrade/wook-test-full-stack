@@ -11,7 +11,8 @@ vi.mock('../../../src/services/authService', () => ({
   },
 }));
 
-const { useRegisterMutation } = await import('../../../src/hooks/api/useRegisterMutation');
+const { useRegisterMutation } =
+  await import('../../../src/hooks/api/useRegisterMutation');
 
 function createWrapper() {
   const queryClient = new QueryClient({
@@ -21,7 +22,11 @@ function createWrapper() {
     },
   });
   return function Wrapper({ children }: { children: React.ReactNode }) {
-    return React.createElement(QueryClientProvider, { client: queryClient }, children);
+    return React.createElement(
+      QueryClientProvider,
+      { client: queryClient },
+      children
+    );
   };
 }
 

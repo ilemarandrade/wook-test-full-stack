@@ -3,7 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { useTranslation } from 'react-i18next';
-import { RegisterFormValues, createRegisterSchema } from '../schemas/authSchemas';
+import {
+  RegisterFormValues,
+  createRegisterSchema,
+} from '../schemas/authSchemas';
 import { TextFieldControlled } from '../components/form/TextFieldControlled';
 import { PasswordFieldControlled } from '../components/form/PasswordFieldControlled';
 import { Button } from '../components/ui/Button';
@@ -17,7 +20,10 @@ const Register: React.FC = () => {
   const { t, i18n } = useTranslation();
 
   const registerMutation = useRegisterMutation();
-  const registerSchema = useMemo(() => createRegisterSchema(t), [t, i18n.language]);
+  const registerSchema = useMemo(
+    () => createRegisterSchema(t),
+    [t, i18n.language]
+  );
   const {
     control,
     handleSubmit,
@@ -118,4 +124,3 @@ const Register: React.FC = () => {
 };
 
 export default Register;
-

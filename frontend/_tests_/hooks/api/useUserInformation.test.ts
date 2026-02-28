@@ -11,7 +11,8 @@ vi.mock('../../../src/services/authService', () => ({
   },
 }));
 
-const { useUserInformation } = await import('../../../src/hooks/api/useUserInformation');
+const { useUserInformation } =
+  await import('../../../src/hooks/api/useUserInformation');
 
 function createWrapper() {
   const queryClient = new QueryClient({
@@ -21,7 +22,11 @@ function createWrapper() {
     },
   });
   return function Wrapper({ children }: { children: React.ReactNode }) {
-    return React.createElement(QueryClientProvider, { client: queryClient }, children);
+    return React.createElement(
+      QueryClientProvider,
+      { client: queryClient },
+      children
+    );
   };
 }
 

@@ -24,7 +24,9 @@ describe('Login page', () => {
     renderLogin();
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /sign in|login\.submit|submit/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /sign in|login\.submit|submit/i })
+    ).toBeInTheDocument();
   });
 
   it('shows link to register', () => {
@@ -40,7 +42,9 @@ describe('Login page', () => {
 
     await user.type(screen.getByLabelText(/email/i), 'user@test.com');
     await user.type(screen.getByLabelText(/password/i), 'secret123');
-    await user.click(screen.getByRole('button', { name: /sign in|login\.submit|submit/i }));
+    await user.click(
+      screen.getByRole('button', { name: /sign in|login\.submit|submit/i })
+    );
 
     expect(apiClient.post).toHaveBeenCalledWith(
       expect.stringContaining('/login'),
@@ -49,14 +53,18 @@ describe('Login page', () => {
   });
 
   it('shows API error message when login fails', async () => {
-    vi.mocked(apiClient.post).mockRejectedValueOnce({ message: 'Invalid credentials' });
+    vi.mocked(apiClient.post).mockRejectedValueOnce({
+      message: 'Invalid credentials',
+    });
 
     const user = userEvent.setup();
     renderLogin();
 
     await user.type(screen.getByLabelText(/email/i), 'user@test.com');
     await user.type(screen.getByLabelText(/password/i), 'wrongpassword');
-    await user.click(screen.getByRole('button', { name: /sign in|login\.submit|submit/i }));
+    await user.click(
+      screen.getByRole('button', { name: /sign in|login\.submit|submit/i })
+    );
 
     await waitFor(
       () => {

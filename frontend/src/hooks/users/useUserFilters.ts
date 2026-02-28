@@ -19,7 +19,8 @@ export const INITIAL_FILTERS: UserFilterValues = {
 };
 
 export function useUserFilters(): UseUserFiltersResult {
-  const [appliedFilters, setAppliedFilters] = useState<UserFilterValues>(INITIAL_FILTERS);
+  const [appliedFilters, setAppliedFilters] =
+    useState<UserFilterValues>(INITIAL_FILTERS);
 
   const applyFilters = (values: UserFilterValues) => {
     setAppliedFilters(values);
@@ -35,4 +36,3 @@ export function useUserFilters(): UseUserFiltersResult {
     clearFilters,
   };
 }
-

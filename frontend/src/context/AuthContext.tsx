@@ -4,8 +4,8 @@ import React, {
   useContext,
   useEffect,
   useState,
-} from "react";
-import { authService } from "../services/authService";
+} from 'react';
+import { authService } from '../services/authService';
 
 export interface User {
   id: string;
@@ -27,7 +27,7 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-const STORAGE_KEY = "woow_auth";
+const STORAGE_KEY = 'woow_auth';
 
 type StoredAuth = {
   token: string;
@@ -51,7 +51,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const user = auth?.user ?? null;
   const token = getStoredAuth()?.token || auth?.token || null;
 
-
   const login = useCallback((newToken: string, newUser?: User) => {
     const nextAuth: StoredAuth = newUser
       ? { token: newToken, user: newUser }
@@ -60,7 +59,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setAuth(nextAuth);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(nextAuth));
 
-    
     getUserInformation();
   }, []);
 
@@ -69,20 +67,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     localStorage.removeItem(STORAGE_KEY);
   }, []);
 
-
   const getUserInformation = useCallback(() => {
-    authService.getCurrentUser().then((data)=>{
+    authService.getCurrentUser().then((data) => {
       if (data) {
         setAuth({
           user: { ...data },
-          token: getStoredAuth()?.token ?? ""
+          token: getStoredAuth()?.token ?? '',
         });
       }
     });
   }, []);
 
   useEffect(() => {
-    if(token) {
+    if (token) {
       getUserInformation();
     }
   }, []);
@@ -97,7 +94,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 export const useAuth = (): AuthContextValue => {
   const ctx = useContext(AuthContext);
   if (!ctx) {
-    throw new Error("useAuth must be used within AuthProvider");
+    throw new Error('useAuth must be used within AuthProvider');
   }
   return ctx;
 };

@@ -18,7 +18,7 @@ const Login: React.FC = () => {
   const { t, i18n } = useTranslation();
 
   const loginMutation = useLoginMutation();
-  
+
   const loginSchema = useMemo(() => createLoginSchema(t), [t, i18n.language]);
   const {
     control,
@@ -87,4 +87,3 @@ const Login: React.FC = () => {
 };
 
 export default Login;
-

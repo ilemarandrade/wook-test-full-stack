@@ -19,7 +19,10 @@ vi.mock('../../src/hooks/users/useUserTableState', () => ({
 }));
 
 vi.mock('../../src/hooks/users/useUserFilters', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('../../src/hooks/users/useUserFilters')>();
+  const actual =
+    await importOriginal<
+      typeof import('../../src/hooks/users/useUserFilters')
+    >();
   return {
     ...actual,
     useUserFilters: vi.fn(),
@@ -58,8 +61,10 @@ vi.mock('react-i18next', async (importOriginal) => {
   };
 });
 
-const { useUserListQuery } = await import('../../src/hooks/api/useUserListQuery');
-const { useUserTableState } = await import('../../src/hooks/users/useUserTableState');
+const { useUserListQuery } =
+  await import('../../src/hooks/api/useUserListQuery');
+const { useUserTableState } =
+  await import('../../src/hooks/users/useUserTableState');
 const { useUserFilters } = await import('../../src/hooks/users/useUserFilters');
 
 const mockUser = {

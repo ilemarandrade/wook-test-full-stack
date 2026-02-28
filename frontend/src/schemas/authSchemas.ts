@@ -37,10 +37,7 @@ export function createLoginSchema(t: TFunction) {
 
 /** @deprecated Usar createLoginSchema(t) para mensajes traducidos */
 export const loginSchema = Joi.object<LoginFormValues>({
-  email: Joi.string()
-    .email()
-    .required()
-    .label('Email'),
+  email: Joi.string().email().required().label('Email'),
   password: Joi.string().min(8).required().label('Password'),
 });
 
@@ -66,12 +63,20 @@ export function createRegisterSchema(t: TFunction) {
       .min(2)
       .max(25)
       .required()
-      .messages({ ...req, 'string.min': m('minLength2'), 'string.max': m('maxLength25') }),
+      .messages({
+        ...req,
+        'string.min': m('minLength2'),
+        'string.max': m('maxLength25'),
+      }),
     lastname: Joi.string()
       .min(2)
       .max(25)
       .required()
-      .messages({ ...req, 'string.min': m('minLength2'), 'string.max': m('maxLength25') }),
+      .messages({
+        ...req,
+        'string.min': m('minLength2'),
+        'string.max': m('maxLength25'),
+      }),
     email: Joi.string()
       .email({ tlds: { allow: false } })
       .required()
@@ -126,12 +131,7 @@ export const registerSchema = Joi.object<RegisterFormValues>({
     .max(15)
     .required()
     .label('Document'),
-  phone: Joi.string()
-    .pattern(/^\d+$/)
-    .min(7)
-    .max(15)
-    .required()
-    .label('Phone'),
+  phone: Joi.string().pattern(/^\d+$/).min(7).max(15).required().label('Phone'),
   password: Joi.string().min(8).required().label('Password'),
   confirmPassword: Joi.string()
     .valid(Joi.ref('password'))
@@ -161,12 +161,20 @@ export function createProfileSchema(t: TFunction) {
       .min(2)
       .max(25)
       .required()
-      .messages({ ...req, 'string.min': m('minLength2'), 'string.max': m('maxLength25') }),
+      .messages({
+        ...req,
+        'string.min': m('minLength2'),
+        'string.max': m('maxLength25'),
+      }),
     lastname: Joi.string()
       .min(2)
       .max(25)
       .required()
-      .messages({ ...req, 'string.min': m('minLength2'), 'string.max': m('maxLength25') }),
+      .messages({
+        ...req,
+        'string.min': m('minLength2'),
+        'string.max': m('maxLength25'),
+      }),
     document: Joi.string()
       .pattern(/^\d+$/)
       .min(7)
@@ -202,11 +210,5 @@ export const profileSchema = Joi.object<ProfileFormValues>({
     .max(15)
     .required()
     .label('Document'),
-  phone: Joi.string()
-    .pattern(/^\d+$/)
-    .min(7)
-    .max(15)
-    .required()
-    .label('Phone'),
+  phone: Joi.string().pattern(/^\d+$/).min(7).max(15).required().label('Phone'),
 });
-

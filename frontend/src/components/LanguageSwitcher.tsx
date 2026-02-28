@@ -12,7 +12,8 @@ const LANG_OPTIONS: Array<{ value: 'es' | 'en' }> = [
 export const LanguageSwitcher: React.FC = () => {
   const { i18n, t } = useTranslation();
   const { user } = useAuth();
-  const currentLang = (i18n.language === 'en' || i18n.language === 'es') ? i18n.language : 'es';
+  const currentLang =
+    i18n.language === 'en' || i18n.language === 'es' ? i18n.language : 'es';
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const nextLang = event.target.value === 'en' ? 'en' : 'es';
@@ -23,8 +24,7 @@ export const LanguageSwitcher: React.FC = () => {
     if (user) {
       authService
         .updateProfile({ lang: nextLang })
-        .then(() => {
-        })
+        .then(() => {})
         .catch(() => {});
     }
   };
@@ -43,4 +43,3 @@ export const LanguageSwitcher: React.FC = () => {
     </select>
   );
 };
-

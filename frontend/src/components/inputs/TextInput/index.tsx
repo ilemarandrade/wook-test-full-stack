@@ -1,7 +1,6 @@
 import React from 'react';
 
-export interface TextInputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
 }
@@ -13,10 +12,7 @@ const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
     return (
       <div className="flex flex-col gap-1">
         {label && (
-          <label
-            htmlFor={inputId}
-            className="block text-sm text-slate-200"
-          >
+          <label htmlFor={inputId} className="block text-sm text-slate-200">
             {label}
           </label>
         )}
@@ -26,11 +22,7 @@ const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
           className={`w-full rounded-md bg-slate-950 border border-slate-700 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 ${className}`}
           {...rest}
         />
-        {error && (
-          <p className="text-xs text-red-400 mt-0.5">
-            {error}
-          </p>
-        )}
+        {error && <p className="text-xs text-red-400 mt-0.5">{error}</p>}
       </div>
     );
   }

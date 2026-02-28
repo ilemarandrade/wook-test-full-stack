@@ -15,9 +15,13 @@ export interface UseUserTableStateResult extends UserTableState {
   pageSizeOptions: readonly PageSizeOption[];
 }
 
-export function useUserTableState(initialState?: Partial<UserTableState>): UseUserTableStateResult {
+export function useUserTableState(
+  initialState?: Partial<UserTableState>
+): UseUserTableStateResult {
   const [page, setPage] = useState(initialState?.page ?? 1);
-  const [pageSize, setPageSizeInternal] = useState<PageSizeOption>(initialState?.pageSize ?? 10);
+  const [pageSize, setPageSizeInternal] = useState<PageSizeOption>(
+    initialState?.pageSize ?? 10
+  );
 
   const setPageSize = (nextPageSize: PageSizeOption) => {
     setPage(1);
@@ -32,4 +36,3 @@ export function useUserTableState(initialState?: Partial<UserTableState>): UseUs
     pageSizeOptions: PAGE_SIZE_OPTIONS,
   };
 }
-

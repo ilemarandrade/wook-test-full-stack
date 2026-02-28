@@ -9,4 +9,3 @@ export const filterLetters = (value: string): string => {
   // Keep all Unicode letters and whitespace (spaces, tabs, etc.)
   return value.replace(/[^\p{L}\s]+/gu, '');
 };
-

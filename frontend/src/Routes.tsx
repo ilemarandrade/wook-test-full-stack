@@ -1,10 +1,10 @@
-import { Navigate, Route, Routes } from "react-router-dom";
-import Login from "./pages/Login";
-import ProtectedRoute from "./components/ProtectedRoute";
-import Register from "./pages/Register";
-import Profile from "./pages/Profile";
-import UserList from "./pages/UserList";
-import PublicRoute from "./components/PublicRoute";
+import { Navigate, Route, Routes } from 'react-router-dom';
+import Login from './pages/Login';
+import ProtectedRoute from './components/ProtectedRoute';
+import Register from './pages/Register';
+import Profile from './pages/Profile';
+import UserList from './pages/UserList';
+import PublicRoute from './components/PublicRoute';
 
 const AppRoutes: React.FC = () => (
   <Routes>
@@ -19,7 +19,7 @@ const AppRoutes: React.FC = () => (
       <Route path="/profile" element={<Profile />} />
     </Route>
 
-    <Route element={<ProtectedRoute requiredRoles={["ADMIN"]} />}>
+    <Route element={<ProtectedRoute requiredRoles={['ADMIN']} />}>
       <Route path="/user-list" element={<UserList />} />
     </Route>
 

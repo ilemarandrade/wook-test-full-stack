@@ -17,7 +17,10 @@ vi.mock('axios', () => ({
           },
         },
         response: {
-          use: (onFulfilled: typeof responseFulfilled, onRejected: typeof responseRejected) => {
+          use: (
+            onFulfilled: typeof responseFulfilled,
+            onRejected: typeof responseRejected
+          ) => {
             responseFulfilled = onFulfilled;
             responseRejected = onRejected;
           },
@@ -35,13 +38,18 @@ vi.mock('../../src/i18n/config', () => ({
   default: { t: (key: string) => key },
 }));
 
-const { getApiErrorMessage, DEFAULT_ERROR_MESSAGE } = await import('../../src/config/axiosInstance');
+const { getApiErrorMessage, DEFAULT_ERROR_MESSAGE } =
+  await import('../../src/config/axiosInstance');
 
 describe('axiosInstance', () => {
   describe('getApiErrorMessage', () => {
     it('returns message when err has message (ApiErrorData)', () => {
-      expect(getApiErrorMessage({ message: 'Server error' })).toBe('Server error');
-      expect(getApiErrorMessage({ message: 'Validation failed' })).toBe('Validation failed');
+      expect(getApiErrorMessage({ message: 'Server error' })).toBe(
+        'Server error'
+      );
+      expect(getApiErrorMessage({ message: 'Validation failed' })).toBe(
+        'Validation failed'
+      );
     });
 
     it('returns DEFAULT_ERROR_MESSAGE when err is null or undefined', () => {
@@ -81,7 +89,8 @@ describe('axiosInstance', () => {
 
     it('adds Authorization Bearer when token is in localStorage', () => {
       getItemSpy.mockImplementation((key: unknown) => {
-        if (key === AUTH_STORAGE_KEY) return JSON.stringify({ token: 'jwt-123' });
+        if (key === AUTH_STORAGE_KEY)
+          return JSON.stringify({ token: 'jwt-123' });
         return null;
       });
       const config = { headers: {} as Record<string, string> };
@@ -183,7 +192,11 @@ describe('axiosInstance', () => {
 
     it('on 401 removes auth from localStorage and redirects to /login when not on /login', async () => {
       Object.defineProperty(window, 'location', {
-        value: { ...originalLocation, pathname: '/dashboard', replace: replaceMock },
+        value: {
+          ...originalLocation,
+          pathname: '/dashboard',
+          replace: replaceMock,
+        },
         configurable: true,
         writable: true,
       });
@@ -198,7 +211,11 @@ describe('axiosInstance', () => {
 
     it('on 401 does not redirect when already on /login', async () => {
       Object.defineProperty(window, 'location', {
-        value: { ...originalLocation, pathname: '/login', replace: replaceMock },
+        value: {
+          ...originalLocation,
+          pathname: '/login',
+          replace: replaceMock,
+        },
         configurable: true,
         writable: true,
       });

@@ -14,13 +14,21 @@ describe('Register page', () => {
     expect(screen.getByLabelText(/nombre|name/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/email|correo/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/documento|document/i)).toBeInTheDocument();
-    const passwordFields = screen.getAllByLabelText(/password|contraseña|confirmar/i);
+    const passwordFields = screen.getAllByLabelText(
+      /password|contraseña|confirmar/i
+    );
     expect(passwordFields.length).toBeGreaterThanOrEqual(1);
-    expect(screen.getByRole('button', { name: /registrarse|register/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /registrarse|register/i })
+    ).toBeInTheDocument();
   });
 
   it('shows link to login', () => {
     renderRegister();
-    expect(screen.getByText(/ya tienes cuenta|already have an account|iniciar sesión/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /ya tienes cuenta|already have an account|iniciar sesión/i
+      )
+    ).toBeInTheDocument();
   });
 });

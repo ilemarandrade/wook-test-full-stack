@@ -65,12 +65,7 @@ function customRender(
   ui: ReactElement,
   options: CustomRenderOptions = {}
 ): ReturnType<typeof render> {
-  const {
-    queryClient,
-    initialEntries,
-    withAuth,
-    ...renderOptions
-  } = options;
+  const { queryClient, initialEntries, withAuth, ...renderOptions } = options;
 
   const Wrapper = createWrapper({
     queryClient,

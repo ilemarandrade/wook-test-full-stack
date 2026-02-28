@@ -98,12 +98,7 @@ describe('UserTable', () => {
 
   it('Previous button is disabled when prevPage is not defined', () => {
     render(
-      <UserTable
-        {...defaultProps}
-        users={[mockUser]}
-        total={10}
-        nextPage={2}
-      />
+      <UserTable {...defaultProps} users={[mockUser]} total={10} nextPage={2} />
     );
     expect(screen.getByRole('button', { name: 'Previous' })).toBeDisabled();
   });
@@ -128,12 +123,7 @@ describe('UserTable', () => {
 
   it('Next button is disabled when nextPage is not defined', () => {
     render(
-      <UserTable
-        {...defaultProps}
-        users={[mockUser]}
-        total={10}
-        prevPage={1}
-      />
+      <UserTable {...defaultProps} users={[mockUser]} total={10} prevPage={1} />
     );
     expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled();
   });
@@ -141,12 +131,7 @@ describe('UserTable', () => {
   it('calls onPageSizeChange when page size select changes', async () => {
     const user = userEvent.setup();
     const onPageSizeChange = vi.fn();
-    render(
-      <UserTable
-        {...defaultProps}
-        onPageSizeChange={onPageSizeChange}
-      />
-    );
+    render(<UserTable {...defaultProps} onPageSizeChange={onPageSizeChange} />);
 
     const select = screen.getByRole('combobox');
     await user.selectOptions(select, '20');
@@ -169,7 +154,9 @@ describe('UserTable', () => {
     expect(screen.getByText(/Page/)).toBeInTheDocument();
     expect(screen.getByText(/of/)).toBeInTheDocument();
     expect(screen.getByText('Total users:')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Previous' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Previous' })
+    ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Next' })).toBeInTheDocument();
     expect(screen.getByText('25')).toBeInTheDocument();
   });

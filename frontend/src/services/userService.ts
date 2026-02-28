@@ -1,5 +1,5 @@
-import { apiClient } from "../config/axiosInstance";
-import type { User } from "../context/AuthContext";
+import { apiClient } from '../config/axiosInstance';
+import type { User } from '../context/AuthContext';
 
 export interface ListUsersResponse {
   users: User[];
@@ -26,7 +26,7 @@ export const userService = {
     document,
     phone,
   }: ListUsersParams): Promise<ListUsersResponse> => {
-    const data = await apiClient.get<ListUsersResponse>("/users", {
+    const data = await apiClient.get<ListUsersResponse>('/users', {
       params: {
         page,
         pageSize,

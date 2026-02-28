@@ -8,11 +8,7 @@ describe('PasswordInput', () => {
     const user = userEvent.setup();
 
     render(
-      <PasswordInput
-        label="Password"
-        name="password"
-        defaultValue="secret"
-      />
+      <PasswordInput label="Password" name="password" defaultValue="secret" />
     );
 
     const input = screen.getByLabelText('Password') as HTMLInputElement;
@@ -28,11 +24,7 @@ describe('PasswordInput', () => {
 
   it('renders error message', () => {
     render(
-      <PasswordInput
-        label="Password"
-        name="password"
-        error="Too short"
-      />
+      <PasswordInput label="Password" name="password" error="Too short" />
     );
 
     expect(screen.getByText('Too short')).toBeInTheDocument();

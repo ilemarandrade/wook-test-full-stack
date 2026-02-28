@@ -72,15 +72,16 @@ export const UserFilterForm: React.FC<UserFilterFormProps> = ({
         <div className="grid grid-cols-2 items-end gap-2">
           {onReset && (
             <Button type="button" variant="outline" onClick={handleClear}>
-                {t('users.filters.clear')}
+              {t('users.filters.clear')}
             </Button>
           )}
           <Button type="submit" disabled={isSearching}>
-              {isSearching ? t('users.filters.searching') : t('users.filters.search')}
+            {isSearching
+              ? t('users.filters.searching')
+              : t('users.filters.search')}
           </Button>
         </div>
       </div>
     </form>
   );
 };
-

@@ -1,19 +1,13 @@
 import React from 'react';
-import {
-  Control,
-  Controller,
-  FieldValues,
-  Path,
-} from 'react-hook-form';
-import PasswordInput, {
-  PasswordInputProps,
-} from '../../inputs/PasswordInput';
+import { Control, Controller, FieldValues, Path } from 'react-hook-form';
+import PasswordInput, { PasswordInputProps } from '../../inputs/PasswordInput';
 
-export interface PasswordFieldControlledProps<T extends FieldValues>
-  extends Omit<
-    PasswordInputProps,
-    'name' | 'value' | 'onChange' | 'onBlur' | 'ref'
-  > {
+export interface PasswordFieldControlledProps<
+  T extends FieldValues,
+> extends Omit<
+  PasswordInputProps,
+  'name' | 'value' | 'onChange' | 'onBlur' | 'ref'
+> {
   name: Path<T>;
   control: Control<T>;
 }

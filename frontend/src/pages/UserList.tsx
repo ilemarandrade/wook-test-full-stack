@@ -2,25 +2,20 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { getApiErrorMessage } from '../config/axiosInstance';
 import { useUserTableState } from '../hooks/users/useUserTableState';
-import { useUserFilters, type UserFilterValues } from '../hooks/users/useUserFilters';
+import {
+  useUserFilters,
+  type UserFilterValues,
+} from '../hooks/users/useUserFilters';
 import { useUserListQuery } from '../hooks/api';
 import { UserFilterForm } from '../components/users/UserFilterForm';
 import { UserTable } from '../components/users/UserTable';
 
 const UserList: React.FC = () => {
-  const { page, pageSize, setPage, setPageSize, pageSizeOptions } = useUserTableState();
-  const {
-    appliedFilters,
-    applyFilters,
-    clearFilters,
-  } = useUserFilters();
+  const { page, pageSize, setPage, setPageSize, pageSizeOptions } =
+    useUserTableState();
+  const { appliedFilters, applyFilters, clearFilters } = useUserFilters();
 
-  const {
-    data,
-    isLoading,
-    isFetching,
-    error,
-  } = useUserListQuery({
+  const { data, isLoading, isFetching, error } = useUserListQuery({
     page,
     pageSize,
     filters: appliedFilters,
@@ -46,7 +41,6 @@ const UserList: React.FC = () => {
           <h1 className="text-2xl font-semibold text-slate-50">
             {t('users.title')}
           </h1>
-        
         </div>
 
         <UserFilterForm
@@ -75,4 +69,3 @@ const UserList: React.FC = () => {
 };
 
 export default UserList;
-

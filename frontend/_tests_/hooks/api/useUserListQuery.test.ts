@@ -11,7 +11,8 @@ vi.mock('../../../src/services/userService', () => ({
   },
 }));
 
-const { useUserListQuery } = await import('../../../src/hooks/api/useUserListQuery');
+const { useUserListQuery } =
+  await import('../../../src/hooks/api/useUserListQuery');
 
 function createWrapper() {
   const queryClient = new QueryClient({
@@ -21,7 +22,11 @@ function createWrapper() {
     },
   });
   return function Wrapper({ children }: { children: React.ReactNode }) {
-    return React.createElement(QueryClientProvider, { client: queryClient }, children);
+    return React.createElement(
+      QueryClientProvider,
+      { client: queryClient },
+      children
+    );
   };
 }
 
@@ -119,8 +124,11 @@ describe('useUserListQuery', () => {
     mockListUsers.mockResolvedValue(listResponse);
 
     const { result, rerender } = renderHook(
-      (props: { page: number; pageSize: number; filters: typeof defaultFilters }) =>
-        useUserListQuery(props),
+      (props: {
+        page: number;
+        pageSize: number;
+        filters: typeof defaultFilters;
+      }) => useUserListQuery(props),
       {
         wrapper: createWrapper(),
         initialProps: {

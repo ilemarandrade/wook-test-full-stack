@@ -2,8 +2,7 @@ import React from 'react';
 
 type ButtonVariant = 'primary' | 'outline' | 'ghostDanger' | 'pagination';
 
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   fullWidth?: boolean;
 }
@@ -38,4 +37,3 @@ export const Button: React.FC<ButtonProps> = ({
 
   return <button className={classes} {...props} />;
 };
-

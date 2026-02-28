@@ -33,11 +33,17 @@ export interface TypedAxiosInstance extends AxiosInstance {
 const AUTH_STORAGE_KEY = 'woow_auth';
 const LANG_STORAGE_KEY = 'woow_lang';
 
-function getAuthFromStorage(): { token?: string; user?: { lang?: string | null } } | null {
+function getAuthFromStorage(): {
+  token?: string;
+  user?: { lang?: string | null };
+} | null {
   try {
     const stored = localStorage.getItem(AUTH_STORAGE_KEY);
     if (!stored) return null;
-    return JSON.parse(stored) as { token?: string; user?: { lang?: string | null } };
+    return JSON.parse(stored) as {
+      token?: string;
+      user?: { lang?: string | null };
+    };
   } catch {
     return null;
   }

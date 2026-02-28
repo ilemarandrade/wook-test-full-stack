@@ -30,4 +30,3 @@ i18n.use(initReactI18next).init({
 
 export { STORAGE_LANG_KEY };
 export default i18n;
-

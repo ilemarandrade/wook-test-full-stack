@@ -4,7 +4,9 @@ import userEvent from '@testing-library/user-event';
 import { LanguageSwitcher } from '../../src/components/LanguageSwitcher';
 
 const mockChangeLanguage = vi.fn().mockResolvedValue(undefined);
-const mockT = vi.fn((key: string) => (key === 'language.es' ? 'Español' : key === 'language.en' ? 'Inglés' : key));
+const mockT = vi.fn((key: string) =>
+  key === 'language.es' ? 'Español' : key === 'language.en' ? 'Inglés' : key
+);
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({

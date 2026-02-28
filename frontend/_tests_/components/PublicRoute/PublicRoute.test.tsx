@@ -24,7 +24,14 @@ describe('PublicRoute', () => {
     render(
       <MemoryRouter initialEntries={['/login']}>
         <Routes>
-          <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
+          <Route
+            path="/login"
+            element={
+              <PublicRoute>
+                <LoginPage />
+              </PublicRoute>
+            }
+          />
           <Route path="/profile" element={<ProfilePage />} />
         </Routes>
       </MemoryRouter>
@@ -40,7 +47,14 @@ describe('PublicRoute', () => {
     render(
       <MemoryRouter initialEntries={['/login']}>
         <Routes>
-          <Route path="/login" element={<PublicRoute><PublicChild /></PublicRoute>} />
+          <Route
+            path="/login"
+            element={
+              <PublicRoute>
+                <PublicChild />
+              </PublicRoute>
+            }
+          />
         </Routes>
       </MemoryRouter>
     );

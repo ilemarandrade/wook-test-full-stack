@@ -54,6 +54,8 @@ describe('Profile page', () => {
     expect(await screen.findByDisplayValue('John')).toBeInTheDocument();
     expect(screen.getByDisplayValue('Doe')).toBeInTheDocument();
     expect(screen.getByDisplayValue('123')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /profile\.save|guardar|save/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /profile\.save|guardar|save/i })
+    ).toBeInTheDocument();
   });
 });

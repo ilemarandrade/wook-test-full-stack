@@ -12,7 +12,9 @@ const queryClient = new QueryClient({
 const mockUseAuth = vi.fn();
 vi.mock('../src/context/AuthContext', () => ({
   useAuth: () => mockUseAuth(),
-  AuthProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  AuthProvider: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
 }));
 
 const mockT = vi.fn((key: string) => key);
@@ -64,7 +66,9 @@ describe('Routes (public vs protected)', () => {
 
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /sign in|submit|login/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /sign in|submit|login/i })
+    ).toBeInTheDocument();
   });
 
   it('without auth: navigating to /register shows register page', () => {
@@ -72,9 +76,13 @@ describe('Routes (public vs protected)', () => {
 
     renderWithRouter(['/register']);
 
-    expect(screen.getByRole('heading', { name: /register\.title|register/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /register\.title|register/i })
+    ).toBeInTheDocument();
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /register/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /register/i })
+    ).toBeInTheDocument();
   });
 
   it('without auth: navigating to /profile redirects to login', () => {

@@ -1,15 +1,12 @@
 import React from 'react';
-import {
-  Control,
-  Controller,
-  FieldValues,
-  Path,
-} from 'react-hook-form';
+import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import TextInput, { TextInputProps } from '../../inputs/TextInput';
 import { filterLetters, filterNumbers } from '../../../utils/inputFilters';
 
-export interface TextFieldControlledProps<T extends FieldValues>
-  extends Omit<TextInputProps, 'name' | 'value' | 'onChange' | 'onBlur' | 'ref'> {
+export interface TextFieldControlledProps<T extends FieldValues> extends Omit<
+  TextInputProps,
+  'name' | 'value' | 'onChange' | 'onBlur' | 'ref'
+> {
   name: Path<T>;
   control: Control<T>;
   inputFilterType?: 'numbers' | 'letters';
@@ -54,4 +51,3 @@ export function TextFieldControlled<T extends FieldValues>({
     />
   );
 }
-

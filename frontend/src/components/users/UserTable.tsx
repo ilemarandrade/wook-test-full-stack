@@ -39,7 +39,7 @@ export const UserTable: React.FC<UserTableProps> = ({
   };
 
   const handleNext = () => {
-     nextPage && onPageChange(nextPage);
+    nextPage && onPageChange(nextPage);
   };
 
   return (
@@ -48,12 +48,24 @@ export const UserTable: React.FC<UserTableProps> = ({
         <table className="min-w-full divide-y divide-slate-800 text-sm">
           <thead className="bg-slate-900/80">
             <tr>
-              <th className="px-4 py-3 text-left font-medium text-slate-300">{t('users.table.name')}</th>
-              <th className="px-4 py-3 text-left font-medium text-slate-300">{t('users.table.lastname')}</th>
-              <th className="px-4 py-3 text-left font-medium text-slate-300">{t('users.table.email')}</th>
-              <th className="px-4 py-3 text-left font-medium text-slate-300">{t('users.table.document')}</th>
-              <th className="px-4 py-3 text-left font-medium text-slate-300">{t('users.table.phone')}</th>
-              <th className="px-4 py-3 text-left font-medium text-slate-300">{t('users.table.role')}</th>
+              <th className="px-4 py-3 text-left font-medium text-slate-300">
+                {t('users.table.name')}
+              </th>
+              <th className="px-4 py-3 text-left font-medium text-slate-300">
+                {t('users.table.lastname')}
+              </th>
+              <th className="px-4 py-3 text-left font-medium text-slate-300">
+                {t('users.table.email')}
+              </th>
+              <th className="px-4 py-3 text-left font-medium text-slate-300">
+                {t('users.table.document')}
+              </th>
+              <th className="px-4 py-3 text-left font-medium text-slate-300">
+                {t('users.table.phone')}
+              </th>
+              <th className="px-4 py-3 text-left font-medium text-slate-300">
+                {t('users.table.role')}
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-800 bg-slate-950/40">
@@ -116,7 +128,9 @@ export const UserTable: React.FC<UserTableProps> = ({
           <span>{t('users.table.rowsPerPage')}</span>
           <select
             value={pageSize}
-            onChange={(e) => onPageSizeChange(Number(e.target.value) as PageSizeOption)}
+            onChange={(e) =>
+              onPageSizeChange(Number(e.target.value) as PageSizeOption)
+            }
             className="rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-sky-500"
           >
             {pageSizeOptions.map((size) => (
@@ -137,9 +151,7 @@ export const UserTable: React.FC<UserTableProps> = ({
           </Button>
           <span>
             {t('users.table.page')}{' '}
-            <span className="font-semibold">
-              {total === 0 ? 0 : page}
-            </span>{' '}
+            <span className="font-semibold">{total === 0 ? 0 : page}</span>{' '}
             {t('users.table.of')}{' '}
             <span className="font-semibold">
               {total === 0 ? 0 : totalPages}
@@ -155,10 +167,10 @@ export const UserTable: React.FC<UserTableProps> = ({
           </Button>
         </div>
         <div className="text-xs text-slate-400">
-          {t('users.table.totalUsers')} <span className="font-semibold text-slate-200">{total}</span>
+          {t('users.table.totalUsers')}{' '}
+          <span className="font-semibold text-slate-200">{total}</span>
         </div>
       </div>
     </div>
   );
 };
-

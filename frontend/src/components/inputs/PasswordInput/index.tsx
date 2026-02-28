@@ -3,8 +3,10 @@ import TextInput, { TextInputProps } from '../TextInput';
 import EyeClosedIcon from '../../../icons/EyeClosedIcon';
 import EyeIcon from '../../../icons/EyeIcon';
 
-export interface PasswordInputProps
-  extends Omit<TextInputProps, 'type' | 'error'> {
+export interface PasswordInputProps extends Omit<
+  TextInputProps,
+  'type' | 'error'
+> {
   error?: string;
 }
 
@@ -31,11 +33,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
             {showPassword ? <EyeClosedIcon /> : <EyeIcon />}
           </button>
         </div>
-        {error && (
-          <p className="text-xs text-red-400 mt-0.5">
-            {error}
-          </p>
-        )}
+        {error && <p className="text-xs text-red-400 mt-0.5">{error}</p>}
       </div>
     );
   }
